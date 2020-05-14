@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TourAssistant</string>
+
+    <string name="place_lat_lng_template">Lat: %1$.6f  Lng: %2$.6f</string>
+
+    <string name="number_of_places">Number of Places: %1$d</string>
+
+    <string name="show_all">Show all</string>
+    <string name="show_less">Show_less</string>
+    <string name="place_name">Place Name</string>
+    <string name="country_name">Country Name</string>
+    <string name="city_name">City Name</string>
+    <string name="lat">Lat</string>
+    <string name="lng">Lng</string>
+    <string name="importance">Importance</string>
+    <string name="add_selected">Add Selected</string>
+</resources>

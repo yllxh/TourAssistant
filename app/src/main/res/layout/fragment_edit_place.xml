@@ -1,0 +1,125 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+        <variable
+            name="place"
+            type="com.yllxh.tourassistant.data.source.local.database.entity.Place"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/place_name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif"
+            android:hint="@string/place_name"
+            android:text="@{place.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/country_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif"
+            android:hint="@string/country_name"
+            android:text="@{place.location.country}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/city_edit_text"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/place_name_edit_text" />
+
+        <EditText
+            android:id="@+id/city_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif"
+            android:hint="@string/city_name"
+            android:text="@{place.location.city}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/country_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/place_name_edit_text" />
+
+        <TextView
+            android:id="@+id/lat_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/lat"
+            app:layout_constraintStart_toStartOf="@+id/country_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/country_edit_text" />
+
+        <EditText
+            android:id="@+id/lat_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{String.valueOf(place.location.latLng.latitude)}"
+            app:layout_constraintBottom_toBottomOf="@+id/lat_label_text_view"
+            app:layout_constraintStart_toEndOf="@+id/lat_label_text_view"
+            app:layout_constraintTop_toTopOf="@+id/lat_label_text_view" />
+
+        <TextView
+            android:id="@+id/lng_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/lng"
+            app:layout_constraintBottom_toBottomOf="@+id/lat_edit_text"
+            app:layout_constraintStart_toEndOf="@+id/lat_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/lat_edit_text" />
+
+        <EditText
+            android:id="@+id/lng_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{String.valueOf(place.location.latLng.longitude)}"
+            app:layout_constraintBottom_toBottomOf="@+id/lng_label_text_view"
+            app:layout_constraintStart_toEndOf="@+id/lng_label_text_view"
+            app:layout_constraintTop_toTopOf="@+id/lng_label_text_view" />
+
+        <TextView
+            android:id="@+id/importance_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/importance"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/lat_label_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/lat_label_text_view" />
+
+        <EditText
+            android:id="@+id/importance_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{String.valueOf(place.importance)}"
+            app:layout_constraintBottom_toBottomOf="@+id/importance_label_text_view"
+            app:layout_constraintStart_toEndOf="@+id/importance_label_text_view"
+            app:layout_constraintTop_toTopOf="@+id/importance_label_text_view" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

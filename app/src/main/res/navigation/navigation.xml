@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/editPlaceFragment"
+        android:name="com.yllxh.tourassistant.screens.editplace.EditPlaceFragment"
+        android:label="EditPlaceFragment"
+        tools:layout="@layout/fragment_edit_place">
+        <argument
+            android:name="place"
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.yllxh.tourassistant.screens.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_editPlaceFragment"
+            app:destination="@id/editPlaceFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_editPathFragment"
+            app:destination="@id/editPathFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPathFragment"
+        android:name="com.yllxh.tourassistant.screens.editpatth.EditPathFragment"
+        android:label="EditPathFragment"
+        tools:layout="@layout/fragment_edit_path">
+        <argument
+            android:name="path"
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+    </fragment>
+</navigation>
