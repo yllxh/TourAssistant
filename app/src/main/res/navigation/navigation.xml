@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_mainFragment_to_editPathFragment"
             app:destination="@id/editPathFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPathFragment"
@@ -34,5 +37,14 @@
         <argument
             android:name="path"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectPlaceFragment"
+        android:name="com.yllxh.tourassistant.screens.selectplace.SelectPlaceFragment"
+        android:label="fragment_select_place"
+        tools:layout="@layout/fragment_select_place" >
+        <action
+            android:id="@+id/action_selectPlaceFragment_to_editPlaceFragment"
+            app:destination="@id/editPlaceFragment" />
     </fragment>
 </navigation>
