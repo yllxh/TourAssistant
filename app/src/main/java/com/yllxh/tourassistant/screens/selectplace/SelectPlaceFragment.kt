@@ -1,39 +1,109 @@
 package com.yllxh.tourassistant.screens.selectplace
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.findFragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-
 import com.yllxh.tourassistant.R
+import com.yllxh.tourassistant.databinding.FragmentSelectPlaceBinding
+import com.yllxh.tourassistant.utils.LocationRetriever
+
+private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
+private const val DEFAULT_CAMERA_ZOOM = 15f
 
 class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
-    private lateinit var mMap: GoogleMap
+    private lateinit var map: GoogleMap
+    private lateinit var locationRetriever: LocationRetriever
+    private lateinit var binding: FragmentSelectPlaceBinding
+
+    private val isLocationPermissionGranted: Boolean
+        get() {
+            return ContextCompat.checkSelfPermission(
+                requireContext().applicationContext,
+                ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_select_place, container, false)
-        view.findFragment<SupportMapFragment>().getMapAsync(this)
-        return view
+        binding = FragmentSelectPlaceBinding.inflate(inflater)
+        (childFragmentManager
+            .findFragmentById(R.id.mapFragment)
+                as SupportMapFragment)
+            .getMapAsync(this)
+
+        binding.fab.setOnClickListener { startUpdatingUserLocation() }
+        return binding.root
+    }
+
+    private fun startUpdatingUserLocation() {
+        if (!isLocationPermissionGranted) {
+            getLocationPermission()
+            return
+        }
+
+        if (!this::locationRetriever.isInitialized) {
+            locationRetriever = LocationRetriever(this, onLocationReceived = ::moveCameraToLocation)
+            return
+        }
+
+        if (locationRetriever.keepTrackOfUser) {
+            locationRetriever.keepTrackOfUser = false
+        } else {
+            locationRetriever.requestDeviceLocation()
+        }
+    }
+
+    private fun getLocationPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(), arrayOf(ACCESS_FINE_LOCATION),
+            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+                if (grantResults.isNotEmpty()
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    startUpdatingUserLocation()
+                }
+            }
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        map = googleMap.apply {
+            isMyLocationEnabled = true
+            uiSettings.isMyLocationButtonEnabled = false
+        }
     }
 
+    private fun Location.getLatLng(): LatLng {
+        return LatLng(latitude, longitude)
+    }
+
+    private fun moveCameraToLocation(location: Location) {
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                location.getLatLng(),
+                DEFAULT_CAMERA_ZOOM
+            )
+        )
+    }
 }
