@@ -21,7 +21,9 @@ private const val DEFAULT_CAMERA_ZOOM = 15f
 
 class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
-    private lateinit var locationRetriever: LocationRetriever
+    private val locationRetriever by lazy {
+        LocationRetriever(this, onLocationReceived = this::moveCameraToLocation)
+    }
     private lateinit var binding: FragmentSelectPlaceBinding
 
     private val isLocationPermissionGranted: Boolean
@@ -51,17 +53,7 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             getLocationPermission()
             return
         }
-
-        if (!this::locationRetriever.isInitialized) {
-            locationRetriever = LocationRetriever(this, onLocationReceived = ::moveCameraToLocation)
-            return
-        }
-
-        if (locationRetriever.keepTrackOfUser) {
-            locationRetriever.keepTrackOfUser = false
-        } else {
-            locationRetriever.requestDeviceLocation()
-        }
+        locationRetriever.toggleTracking()
     }
 
     private fun getLocationPermission() {

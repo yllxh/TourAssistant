@@ -9,10 +9,10 @@ import com.google.android.gms.location.*
 
 class LocationRetriever(
     private val fragment: Fragment,
-    var keepTrackOfUser: Boolean = true,
     private val onLocationReceived: (Location) -> Unit
-): LifecycleObserver{
+) : LifecycleObserver {
 
+    private var keepTrackOfUser: Boolean = false
     private var fusedLocationProvider: FusedLocationProviderClient? = null
     private var locationReceivedCallBack: LocationCallback? = null
 
@@ -21,8 +21,7 @@ class LocationRetriever(
         requestDeviceLocation()
     }
 
-    fun requestDeviceLocation() {
-        keepTrackOfUser = true
+    private fun requestDeviceLocation() {
 
         if (locationReceivedCallBack == null) {
             initLocationReceivedCallBack()
@@ -54,23 +53,37 @@ class LocationRetriever(
 
                     onLocationReceived(it)
                     if (!keepTrackOfUser)
-                        fusedLocationProvider?.removeLocationUpdates(locationReceivedCallBack)
+                        fusedLocationProvider.stop()
                 }
             }
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun onResume(){
-        if (keepTrackOfUser){
+    private fun onResume() {
+        if (keepTrackOfUser) {
             requestDeviceLocation()
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    private fun onPause(){
-        if (keepTrackOfUser){
-            fusedLocationProvider?.removeLocationUpdates(locationReceivedCallBack)
+    private fun onPause() {
+        if (keepTrackOfUser) {
+            fusedLocationProvider.stop()
+        }
+    }
+
+    private fun FusedLocationProviderClient?.stop() {
+        this?.removeLocationUpdates(locationReceivedCallBack)
+    }
+
+    fun toggleTracking() {
+        if (keepTrackOfUser) {
+            fusedLocationProvider.stop()
+            keepTrackOfUser = false
+        } else {
+            keepTrackOfUser = true
+            requestDeviceLocation()
         }
     }
 }
