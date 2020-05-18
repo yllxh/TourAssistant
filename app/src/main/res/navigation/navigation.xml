@@ -13,6 +13,9 @@
         <argument
             android:name="place"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB" />
+        <action
+            android:id="@+id/action_editPlaceFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"

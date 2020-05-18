@@ -14,6 +14,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.yllxh.tourassistant.R
+import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
 import com.yllxh.tourassistant.databinding.FragmentSelectPlaceBinding
 import com.yllxh.tourassistant.utils.LocationRetriever
 
@@ -22,6 +23,8 @@ private const val DEFAULT_CAMERA_ZOOM = 15f
 
 class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
+    private var selectedPlace: PlaceDB = PlaceDB()
+    private var wasPlaceSelected = false
     private val locationRetriever by lazy {
         LocationRetriever(requireContext(), onLocationReceived = this::moveCameraToLocation)
     }

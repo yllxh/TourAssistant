@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.yllxh.tourassistant.R
-import com.yllxh.tourassistant.data.model.LatLngDB
 
 import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
@@ -65,12 +64,10 @@ class EditPlaceFragment : Fragment() {
                         .let {
                             return@let if (it < 1) 1 else it
                         }
-                    it.locationDB.city = cityEditText.text.toString()
-                    it.locationDB.country = countryEditText.text.toString()
-                    it.locationDB.LatLngDB = LatLngDB(
-                        latEditText.text.toString().toDouble(),
-                        lngEditText.text.toString().toDouble()
-                    )
+                    it.location.city = cityEditText.text.toString()
+                    it.location.country = countryEditText.text.toString()
+                    it.location.latitude = latEditText.text.toString().toDouble()
+                    it.location.longitude = lngEditText.text.toString().toDouble()
                 }
         }
     }

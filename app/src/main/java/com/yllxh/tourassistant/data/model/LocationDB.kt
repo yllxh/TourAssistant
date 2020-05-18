@@ -6,7 +6,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class LocationDB(
-    @Embedded var LatLngDB: LatLngDB = LatLngDB(),
+    var latitude: Double = -1.0,
+    var longitude: Double = -1.0,
     var country: String = "",
     var city: String = ""
-) : Parcelable
+) : Parcelable {
+    fun isValid(): Boolean {
+        return latitude > 0 && longitude > 0
+    }
+}

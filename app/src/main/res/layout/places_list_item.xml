@@ -38,7 +38,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif"
-            android:text="@{place.locationDB.country + `, ` + place.locationDB.city}"
+            android:text="@{place.location.country + `, ` + place.location.city}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
