@@ -9,6 +9,8 @@ import com.yllxh.tourassistant.R
 
 import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
+import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToMainFragment as toMainFragment
+import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment2 as toSelectPlaceFragment
 
 class EditPlaceFragment : Fragment() {
 
@@ -30,10 +32,12 @@ class EditPlaceFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentEditPlaceBinding.inflate(inflater, container, false)
+        binding = FragmentEditPlaceBinding.inflate(inflater)
 
         binding.place = place
-
+        binding.editLatLng.setOnClickListener {
+            findNavController().navigate(toSelectPlaceFragment(place))
+        }
         return binding.root
     }
 
@@ -41,7 +45,7 @@ class EditPlaceFragment : Fragment() {
         return when (item.itemId) {
             R.id.save_place_menu_item -> {
                 viewModel.saveChangesToPlace(extractPlaceInfoFromLayout())
-                findNavController().navigateUp()
+                findNavController().navigate(toMainFragment())
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -61,9 +65,7 @@ class EditPlaceFragment : Fragment() {
                     it.importance = importanceEditText.text
                         .toString()
                         .toInt()
-                        .let {
-                            return@let if (it < 1) 1 else it
-                        }
+                        .let {return@let if (it < 1) 1 else it}
                     it.location.city = cityEditText.text.toString()
                     it.location.country = countryEditText.text.toString()
                     it.location.latitude = latEditText.text.toString().toDouble()
