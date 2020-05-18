@@ -1,7 +1,6 @@
 package com.yllxh.tourassistant.screens.editpatth
 
 import android.app.Activity.RESULT_OK
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,8 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 
 import com.yllxh.tourassistant.adapter.SimplePlacesAdapter
-import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
 import com.yllxh.tourassistant.data.source.local.database.relation.PathWithPlaces
 import com.yllxh.tourassistant.databinding.DialogSelectPlacesBinding
 import com.yllxh.tourassistant.utils.observe
@@ -66,7 +64,7 @@ class SelectPlacesDialog : DialogFragment() {
         const val TAG: String = KEY
         const val SELECT_PLACES_DIALOG_REQUEST = 101
 
-        fun newInstance(fragment: Fragment, alreadySelected: List<Place>?): SelectPlacesDialog {
+        fun newInstance(fragment: Fragment, alreadySelected: List<PlaceDB>?): SelectPlacesDialog {
             val pathWithPlaces = PathWithPlaces(places = alreadySelected ?: listOf())
             return SelectPlacesDialog().apply {
                 setTargetFragment(fragment, SELECT_PLACES_DIALOG_REQUEST)
@@ -75,7 +73,7 @@ class SelectPlacesDialog : DialogFragment() {
 
         }
 
-        fun extractData(intent: Intent?): List<Place> {
+        fun extractData(intent: Intent?): List<PlaceDB> {
             return (intent?.extras?.get(EXTRA_KEY) as PathWithPlaces).path.places
         }
     }

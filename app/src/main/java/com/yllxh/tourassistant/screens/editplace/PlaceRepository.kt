@@ -1,21 +1,20 @@
 package com.yllxh.tourassistant.screens.editplace
 
 import android.content.Context
-import android.content.LocusId
 import com.yllxh.tourassistant.data.source.local.database.AppDatabase
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PlaceRepository(context: Context) {
     private val placeDao = AppDatabase.getInstance(context).placeDao
 
-    suspend fun saveChangesToPlace(place: Place) {
+    suspend fun saveChangesToPlace(placeDB: PlaceDB) {
         withContext(Dispatchers.IO) {
-            if (place.placeId != 0L)
-                placeDao.updatePlace(place)
+            if (placeDB.placeId != 0L)
+                placeDao.updatePlace(placeDB)
             else
-                placeDao.insertPlace(place)
+                placeDao.insertPlace(placeDB)
         }
     }
 }

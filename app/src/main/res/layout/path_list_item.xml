@@ -7,7 +7,7 @@
 
         <variable
             name="path"
-            type="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+            type="com.yllxh.tourassistant.data.source.local.database.entity.PathDB" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

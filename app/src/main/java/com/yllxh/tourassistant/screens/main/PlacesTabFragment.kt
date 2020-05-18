@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.yllxh.tourassistant.adapter.PlacesAdapter
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentPlacesTabBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.main.MainFragmentDirections.actionMainFragmentToEditPlaceFragment as toEditPlaceFragment

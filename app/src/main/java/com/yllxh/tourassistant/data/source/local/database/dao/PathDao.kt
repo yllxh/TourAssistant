@@ -2,21 +2,20 @@ package com.yllxh.tourassistant.data.source.local.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.data.source.local.database.entity.crossreference.PathPlaceCrossRef
+import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
 import com.yllxh.tourassistant.data.source.local.database.relation.PathWithPlaces
 
 @Dao
 interface PathDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertPath(path: Path): Long
+    fun insertPath(path: PathDB): Long
 
 //    @Insert(onConflict = OnConflictStrategy.IGNORE)
 //    fun insertAllPaths(paths: List<Path>)
 
     @Query("SELECT * FROM path_table")
-    fun getAllPaths(): LiveData<List<Path>>
+    fun getAllPaths(): LiveData<List<PathDB>>
 
     @Transaction
     @Query("SELECT * FROM path_table")
@@ -28,7 +27,7 @@ interface PathDao {
     fun getPath(pathId: Long): LiveData<PathWithPlaces>
 
     @Update
-    fun updatePath(path: Path)
+    fun updatePath(path: PathDB)
 //
 //    @Update
 //    fun updateAllPaths(paths: List<Path>)

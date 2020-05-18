@@ -1,5 +1,6 @@
 package com.yllxh.tourassistant.utils
 
+import android.content.Context
 import android.location.Location
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -8,18 +9,14 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.location.*
 
 class LocationRetriever(
-    private val fragment: Fragment,
+    private val context: Context,
     private val onLocationReceived: (Location) -> Unit
-) : LifecycleObserver {
+){
 
     private var keepTrackOfUser: Boolean = false
     private var fusedLocationProvider: FusedLocationProviderClient? = null
     private var locationReceivedCallBack: LocationCallback? = null
 
-    init {
-        fragment.lifecycle.addObserver(this)
-        requestDeviceLocation()
-    }
 
     private fun requestDeviceLocation() {
 
@@ -28,7 +25,7 @@ class LocationRetriever(
         }
         if (fusedLocationProvider == null) {
             fusedLocationProvider =
-                LocationServices.getFusedLocationProviderClient(fragment.requireContext())
+                LocationServices.getFusedLocationProviderClient(context)
         }
         fusedLocationProvider?.requestLocationUpdates(
             getLocationRequest(),
@@ -56,20 +53,6 @@ class LocationRetriever(
                         fusedLocationProvider.stop()
                 }
             }
-        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun onResume() {
-        if (keepTrackOfUser) {
-            requestDeviceLocation()
-        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    private fun onPause() {
-        if (keepTrackOfUser) {
-            fusedLocationProvider.stop()
         }
     }
 

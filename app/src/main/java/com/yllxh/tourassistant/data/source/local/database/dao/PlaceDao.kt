@@ -2,20 +2,20 @@ package com.yllxh.tourassistant.data.source.local.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
 
 
 @Dao
 interface PlaceDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertPlace(place: Place): Long
+    fun insertPlace(placeDB: PlaceDB): Long
 
     @Query("SELECT * FROM place_table")
-    fun getAllPlaces(): LiveData<List<Place>>
+    fun getAllPlaces(): LiveData<List<PlaceDB>>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updatePlace(place: Place)
+    fun updatePlace(placeDB: PlaceDB)
 //
 //    @Insert(onConflict = OnConflictStrategy.IGNORE)
 //    fun insertAllPlaces(places: List<Place>)

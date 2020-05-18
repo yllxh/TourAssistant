@@ -8,16 +8,16 @@ import com.yllxh.tourassistant.data.source.local.database.dao.CrossReferenceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PathDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PlaceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.ToDoDao
-import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
-import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
+import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
+import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
+import com.yllxh.tourassistant.data.source.local.database.entity.ToDoDB
 import com.yllxh.tourassistant.data.source.local.database.entity.crossreference.PathPlaceCrossRef
 
 @Database(
     entities = [
-        Path::class,
-        Place::class,
-        ToDo::class,
+        PathDB::class,
+        PlaceDB::class,
+        ToDoDB::class,
         PathPlaceCrossRef::class
     ],
     version = 1,

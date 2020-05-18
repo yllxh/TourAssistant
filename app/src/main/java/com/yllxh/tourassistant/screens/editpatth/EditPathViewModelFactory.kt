@@ -3,9 +3,9 @@ package com.yllxh.tourassistant.screens.editpatth
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yllxh.tourassistant.data.source.local.database.entity.Path
+import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
 
-class EditPathViewModelFactory(private val path: Path, private val app: Application) :
+class EditPathViewModelFactory(private val path: PathDB, private val app: Application) :
     ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

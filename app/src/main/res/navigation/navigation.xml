@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/selectPlaceFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/editPlaceFragment"
@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_edit_place">
         <argument
             android:name="place"
-            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -36,7 +36,7 @@
         tools:layout="@layout/fragment_edit_path">
         <argument
             android:name="path"
-            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.PathDB" />
     </fragment>
     <fragment
         android:id="@+id/selectPlaceFragment"

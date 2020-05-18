@@ -5,7 +5,7 @@
     <data>
         <variable
             name="place"
-            type="com.yllxh.tourassistant.data.source.local.database.entity.Place"/>
+            type="com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif"
             android:hint="@string/country_name"
-            android:text="@{place.location.country}"
+            android:text="@{place.locationDB.country}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/city_edit_text"
@@ -53,7 +53,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif"
             android:hint="@string/city_name"
-            android:text="@{place.location.city}"
+            android:text="@{place.locationDB.city}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="@{String.valueOf(place.location.latLng.latitude)}"
+            android:text="@{String.valueOf(place.locationDB.latLngDB.latitude)}"
             app:layout_constraintBottom_toBottomOf="@+id/lat_label_text_view"
             app:layout_constraintStart_toEndOf="@+id/lat_label_text_view"
             app:layout_constraintTop_toTopOf="@+id/lat_label_text_view" />
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="@{String.valueOf(place.location.latLng.longitude)}"
+            android:text="@{String.valueOf(place.locationDB.latLngDB.longitude)}"
             app:layout_constraintBottom_toBottomOf="@+id/lng_label_text_view"
             app:layout_constraintStart_toEndOf="@+id/lng_label_text_view"
             app:layout_constraintTop_toTopOf="@+id/lng_label_text_view" />

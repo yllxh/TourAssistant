@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.databinding.FragmentSelectPlaceBinding
 import com.yllxh.tourassistant.utils.LocationRetriever
@@ -22,7 +23,7 @@ private const val DEFAULT_CAMERA_ZOOM = 15f
 class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private val locationRetriever by lazy {
-        LocationRetriever(this, onLocationReceived = this::moveCameraToLocation)
+        LocationRetriever(requireContext(), onLocationReceived = this::moveCameraToLocation)
     }
     private lateinit var binding: FragmentSelectPlaceBinding
 
@@ -43,6 +44,7 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             .findFragmentById(R.id.mapFragment)
                 as SupportMapFragment)
             .getMapAsync(this)
+
 
         binding.fab.setOnClickListener { startUpdatingUserLocation() }
         return binding.root
@@ -81,8 +83,9 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap.apply {
-            isMyLocationEnabled = true
-            uiSettings.isMyLocationButtonEnabled = false
+            setOnMapLongClickListener {
+                googleMap.addMarker(MarkerOptions().position(it))
+            }
         }
     }
 

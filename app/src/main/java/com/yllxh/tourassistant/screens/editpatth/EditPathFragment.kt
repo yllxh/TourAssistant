@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.adapter.SimplePlacesAdapter
-import com.yllxh.tourassistant.data.source.local.database.entity.Path
+import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
 import com.yllxh.tourassistant.databinding.FragmentEditPathBinding
 import com.yllxh.tourassistant.utils.observe
 
@@ -78,8 +78,8 @@ class EditPathFragment : Fragment() {
         }
     }
 
-    private fun extractPathInfoFromLayout(): Path {
-        return Path().apply {
+    private fun extractPathInfoFromLayout(): PathDB {
+        return PathDB().apply {
             name = binding.placeNameEditText.text.toString()
         }
     }
