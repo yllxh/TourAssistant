@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
@@ -17,9 +20,12 @@ import com.yllxh.tourassistant.screens.selectplace.SelectPlaceFragmentDirections
 
 class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
-    private lateinit var selectedPlace: PlaceDB
     private var marker: Marker? = null
+    private val selectedPlace get() = viewModel.selectedPlace.value!!
     private lateinit var binding: FragmentSelectPlaceBinding
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(SelectPlaceViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +37,16 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                 as SupportMapFragment)
             .getMapAsync(this)
 
-        selectedPlace = SelectPlaceFragmentArgs.fromBundle(requireArguments()).selectedPlace
+        val fromBundle = SelectPlaceFragmentArgs.fromBundle(requireArguments())
+        viewModel.setSelectedPlace(fromBundle.selectedPlace)
 
+        viewModel.selectedPlace.observe(viewLifecycleOwner, Observer {
+            marker?.title = it.location.address
+
+            Toast.makeText(requireContext(), it.location.address, Toast.LENGTH_LONG).show()
+        })
         binding.fab.setOnClickListener {
-            findNavController().navigate(toEditPlaceFragment(selectedPlace))
+            findNavController().navigate(toEditPlaceFragment(viewModel.selectedPlace.value!!))
         }
         return binding.root
     }
@@ -43,12 +55,15 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
 
         map = googleMap.apply {
 
-            if (::selectedPlace.isInitialized && selectedPlace.location.isValid()){
+            if (selectedPlace.location.isValid()) {
                 val latLng = LatLng(
                     selectedPlace.location.latitude,
                     selectedPlace.location.longitude
                 )
                 marker = googleMap.addMarker(MarkerOptions().position(latLng))
+                if (selectedPlace.location.address.isEmpty()){
+                    viewModel.searchAddressAt(selectedPlace.location.toLatLng())
+                }
             }
 
             setOnMapLongClickListener {
@@ -56,10 +71,11 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                     marker?.remove()
                 }
                 marker = googleMap.addMarker(MarkerOptions().position(it))
-                selectedPlace = selectedPlace.apply {
+                viewModel.setSelectedPlace(PlaceDB(selectedPlace.placeId).apply {
                     location.latitude = it.latitude
                     location.longitude = it.longitude
-                }
+                    location.address = ""
+                })
             }
         }
     }
