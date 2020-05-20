@@ -10,4 +10,17 @@ data class Address(
     var city: String = "",
     var country: String = "",
     var countryCode: String = ""
-) : Parcelable
+) : Parcelable {
+    fun isEmpty(): Boolean{
+        return address.isEmpty()
+                && city.isEmpty()
+                && country.isEmpty()
+                && countryCode.isEmpty()
+    }
+    fun hasMissingInfo(): Boolean{
+        return address.isEmpty()
+                || city.isEmpty()
+                || country.isEmpty()
+                || countryCode.isEmpty()
+    }
+}

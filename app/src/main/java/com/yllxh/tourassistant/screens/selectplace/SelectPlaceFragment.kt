@@ -40,10 +40,12 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     private lateinit var autoComplete: AutocompleteSupportFragment
     private lateinit var placesClient: PlacesClient
     private var marker: Marker? = null
-    private val selectedPlace get() = viewModel.selectedPlace.value!!
+    private val selectedPlace: PlaceDB get() = viewModel.selectedPlace.value!!
     private lateinit var binding: FragmentSelectPlaceBinding
     private val viewModel by lazy {
-        ViewModelProvider(this).get(SelectPlaceViewModel::class.java)
+        val place = SelectPlaceFragmentArgs.fromBundle(requireArguments()).selectedPlace
+        val factory = SelectPlaceViewModelFactory(place, requireActivity().application)
+        ViewModelProvider(this, factory).get(SelectPlaceViewModel::class.java)
     }
 
 
@@ -59,9 +61,6 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentSelectPlaceBinding.inflate(inflater)
 
-        val fromBundle = SelectPlaceFragmentArgs.fromBundle(requireArguments())
-        viewModel.setSelectedPlace(fromBundle.selectedPlace)
-
         viewModel.selectedPlace.observe(viewLifecycleOwner, Observer {
             marker?.title = it.location.addressAsString
 
@@ -76,7 +75,10 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             override fun onPlaceSelected(place: Place) {
                 viewModel.setSelectedPlace(place.toPlaceDB())
                 place.latLng?.let {
-                    map.addMarker(MarkerOptions().position(it))
+                    marker = map.addMarker(MarkerOptions()
+                        .position(it))
+                        .apply { title = selectedPlace.name }
+
                     map.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(it, 15f)
                     )

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.LocationDB
 import kotlinx.android.parcel.Parcelize
 import java.lang.IllegalArgumentException
@@ -25,5 +26,12 @@ data class PlaceDB(
             throw IllegalArgumentException("Importance is $value, but should be between 1 and 10.")
 
         _importance = value
+    }
+
+    fun fillMissingInfo(address: Address){
+        if (name.isEmpty() || name.isBlank()){
+            name = address.country
+        }
+        location.fillMissingInfo(address)
     }
 }

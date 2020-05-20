@@ -13,8 +13,13 @@ data class LocationDB(
     @Embedded
     var address: Address = Address()
 ) : Parcelable {
-    @IgnoredOnParcel val addressAsString: String get() = address.address
-    @IgnoredOnParcel val countryCode: String get() = address.countryCode
+    @IgnoredOnParcel var countryCode: String
+        get() = address.countryCode
+        set(value) { address.countryCode = value }
+    @IgnoredOnParcel var addressAsString: String
+        get() = address.address
+        set(value) { address.address = value }
+
     @IgnoredOnParcel var country: String
         get() = address.country
         set(value) { address.country = value }
@@ -29,5 +34,25 @@ data class LocationDB(
 
     fun toLatLng(): LatLng {
         return LatLng(latitude, longitude)
+    }
+
+    fun fillMissingInfo(address: Address){
+        if (addressAsString.isEmpty()
+            || addressAsString.isBlank()){
+
+            addressAsString = address.address
+        }
+        if (country.isBlank() ||
+            country.isEmpty()){
+            country = address.country
+        }
+        if (countryCode.isBlank() ||
+            countryCode.isEmpty()){
+            countryCode = address.countryCode
+        }
+        if (city.isBlank() ||
+            city.isEmpty()){
+            city = address.city
+        }
     }
 }
