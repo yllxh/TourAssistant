@@ -15,7 +15,7 @@ data class PlaceDB(
     val placeId: Long = 0,
     var name: String = "N/A",
     private var _importance: Int = 1,
-    @Embedded val location: LocationDB = LocationDB()
+    @Embedded var location: LocationDB = LocationDB()
 ): Parcelable {
 
     var importance: Int
