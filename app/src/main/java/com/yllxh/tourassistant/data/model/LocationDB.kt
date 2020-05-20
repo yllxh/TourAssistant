@@ -3,16 +3,25 @@ package com.yllxh.tourassistant.data.model
 import android.os.Parcelable
 import androidx.room.Embedded
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class LocationDB(
     var latitude: Double = Double.MAX_VALUE,
     var longitude: Double = Double.MAX_VALUE,
-    var address: String = "",
-    var country: String = "",
-    var city: String = ""
+    @Embedded
+    var address: Address = Address()
 ) : Parcelable {
+    @IgnoredOnParcel val addressAsString: String get() = address.address
+    @IgnoredOnParcel val countryCode: String get() = address.countryCode
+    @IgnoredOnParcel var country: String
+        get() = address.country
+        set(value) { address.country = value }
+    @IgnoredOnParcel var city: String
+        get() = address.city
+        set(value) { address.city = value }
+
     fun isValid(): Boolean {
         return (latitude > -90 || latitude < 90)
                 && (longitude > -180 || longitude < 180)

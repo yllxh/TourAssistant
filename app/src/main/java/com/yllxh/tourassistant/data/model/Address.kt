@@ -5,4 +5,9 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AddressLatLng(var address: String, val latLng: LatLng) : Parcelable
+data class Address(
+    var address: String = "",
+    var city: String = "",
+    var country: String = "",
+    var countryCode: String = ""
+) : Parcelable

@@ -1,28 +1,24 @@
 package com.yllxh.tourassistant.utils
 
 import android.content.Context
-import android.location.Address
+import android.location.Address as AndroidAddress
 import android.location.Geocoder
 import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
-import com.yllxh.tourassistant.data.model.AddressLatLng
+import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.screens.selectplace.SelectPlaceViewModel
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-fun getAddressAt(context: Context, latLng: LatLng): String {
-    val geocoder = Geocoder(
-        context,
-        Locale.getDefault()
-    )
-    var addresses: List<Address>? = null
-
-    val addressLatLng = AddressLatLng("", latLng)
-
+fun getAddressAt(context: Context, latLng: LatLng): Address {
+    var addresses: List<AndroidAddress>? = null
     try {
-        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        addresses = Geocoder(
+            context,
+            Locale.getDefault()
+        ).getFromLocation(latLng.latitude, latLng.longitude, 1)
     } catch (ioException: IOException) {
         Log.e(SelectPlaceViewModel::class.simpleName, "Service Not Available", ioException)
     } catch (illegalArgumentException: IllegalArgumentException) {
@@ -33,6 +29,8 @@ fun getAddressAt(context: Context, latLng: LatLng): String {
         )
     }
 
+    val addressRetrieved = Address()
+
     if (addresses != null && addresses.isNotEmpty()) {
         val address = addresses[0]
         val addressParts = ArrayList<String?>()
@@ -40,8 +38,13 @@ fun getAddressAt(context: Context, latLng: LatLng): String {
         for (i in 0..address.maxAddressLineIndex) {
             addressParts.add(address.getAddressLine(i))
         }
-        addressLatLng.address = TextUtils.join("\n", addressParts)
+        addressRetrieved.apply {
+            this.address = TextUtils.join("\n", addressParts)
+            this.city = address.locality ?: ""
+            this.country = address.countryName ?: ""
+            this.countryCode = address.countryCode ?: ""
+        }
     }
 
-    return addressLatLng.address
+    return addressRetrieved
 }
