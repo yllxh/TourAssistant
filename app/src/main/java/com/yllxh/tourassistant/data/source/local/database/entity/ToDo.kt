@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
 
 @Parcelize
 @Entity(tableName = "todo_table")
-data class ToDoDB(
+data class ToDo(
     @PrimaryKey(autoGenerate = true)
     val todoId: Long = 0,
     val placeUsedId: Long = 0,

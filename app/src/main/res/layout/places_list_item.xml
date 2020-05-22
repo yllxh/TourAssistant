@@ -7,7 +7,7 @@
 
         <variable
             name="place"
-            type="com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB" />
+            type="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

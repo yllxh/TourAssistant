@@ -5,18 +5,18 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.yllxh.tourassistant.data.model.Address
-import com.yllxh.tourassistant.data.model.LocationDB
+import com.yllxh.tourassistant.data.model.Location
 import kotlinx.android.parcel.Parcelize
 import java.lang.IllegalArgumentException
 
 @Parcelize
 @Entity(tableName = "place_table")
-data class PlaceDB(
+data class Place(
     @PrimaryKey(autoGenerate = true)
     val placeId: Long = 0,
     var name: String = "N/A",
     private var _importance: Int = 1,
-    @Embedded var location: LocationDB = LocationDB()
+    @Embedded var location: Location = Location()
 ): Parcelable {
 
     var importance: Int

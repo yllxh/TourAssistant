@@ -3,15 +3,14 @@ package com.yllxh.tourassistant.screens.selectplace
 import android.app.Application
 import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
-import com.yllxh.tourassistant.data.model.Address
-import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.utils.getAddressAt
 import kotlinx.coroutines.*
 
-class SelectPlaceViewModel(selectedPlace: PlaceDB, app: Application) : AndroidViewModel(app) {
+class SelectPlaceViewModel(selectedPlace: Place, app: Application) : AndroidViewModel(app) {
 
     private val _selectedPlace = MutableLiveData(selectedPlace)
-    val selectedPlace: LiveData<PlaceDB> get() = _selectedPlace
+    val selectedPlace: LiveData<Place> get() = _selectedPlace
 
     init {
         if (selectedPlace.location.address.isEmpty()){
@@ -32,7 +31,7 @@ class SelectPlaceViewModel(selectedPlace: PlaceDB, app: Application) : AndroidVi
         }
     }
 
-    fun setSelectedPlace(selectedPlace: PlaceDB) {
+    fun setSelectedPlace(selectedPlace: Place) {
         _selectedPlace.value = selectedPlace
 
         if (selectedPlace.location.address.hasMissingInfo()) {

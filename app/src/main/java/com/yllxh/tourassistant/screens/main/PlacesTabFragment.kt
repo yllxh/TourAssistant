@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.yllxh.tourassistant.adapter.PlacesAdapter
-import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentPlacesTabBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.main.MainFragmentDirections.actionMainFragmentToEditPlaceFragment as toEditPlaceFragment
@@ -36,7 +36,7 @@ class PlacesTabFragment : Fragment() {
         binding = FragmentPlacesTabBinding.inflate(inflater)
         binding.placesRecycleView.adapter = placesAdapter
         binding.fab.setOnClickListener {
-            findNavController().navigate(toSelectPlaceFragment(PlaceDB()))
+            findNavController().navigate(toSelectPlaceFragment(Place()))
         }
 
         observe(viewModel.places, placesAdapter::submitList)

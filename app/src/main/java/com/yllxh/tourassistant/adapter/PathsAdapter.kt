@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yllxh.tourassistant.R
-import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Path
 import com.yllxh.tourassistant.databinding.PathListItemBinding
 
 class PathsAdapter(
-    private val onItemClickListener: (PathDB) -> Unit
-) : ListAdapter<PathDB, PathsAdapter.ViewHolder>(PathDiffCallback()) {
+    private val onItemClickListener: (Path) -> Unit
+) : ListAdapter<Path, PathsAdapter.ViewHolder>(PathDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
@@ -24,8 +24,8 @@ class PathsAdapter(
     class ViewHolder private constructor(private val binding: PathListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            path: PathDB,
-            onItemClickListener: (PathDB) -> Unit
+            path: Path,
+            onItemClickListener: (Path) -> Unit
         ) {
             binding.path = path
             binding.root.setOnClickListener {
@@ -65,12 +65,12 @@ class PathsAdapter(
     }
 }
 
-private class PathDiffCallback : DiffUtil.ItemCallback<PathDB>() {
-    override fun areItemsTheSame(oldItem: PathDB, newItem: PathDB): Boolean {
+private class PathDiffCallback : DiffUtil.ItemCallback<Path>() {
+    override fun areItemsTheSame(oldItem: Path, newItem: Path): Boolean {
         return oldItem.pathId == newItem.pathId
     }
 
-    override fun areContentsTheSame(oldItem: PathDB, newItem: PathDB): Boolean {
+    override fun areContentsTheSame(oldItem: Path, newItem: Path): Boolean {
         return oldItem == newItem
     }
 }

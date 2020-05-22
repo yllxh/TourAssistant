@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_edit_place">
         <argument
             android:name="place"
-            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB" />
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
         <action
             android:id="@+id/action_editPlaceFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -43,7 +43,7 @@
         tools:layout="@layout/fragment_edit_path">
         <argument
             android:name="path"
-            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.PathDB" />
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
     </fragment>
     <fragment
         android:id="@+id/selectPlaceFragment"
@@ -55,6 +55,6 @@
             app:destination="@id/editPlaceFragment" />
         <argument
             android:name="selectedPlace"
-            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB" />
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
     </fragment>
 </navigation>

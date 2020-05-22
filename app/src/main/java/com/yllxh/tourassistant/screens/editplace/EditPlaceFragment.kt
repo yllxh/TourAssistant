@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.yllxh.tourassistant.R
 
-import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToMainFragment as toMainFragment
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment2 as toSelectPlaceFragment
@@ -15,7 +15,7 @@ import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.act
 class EditPlaceFragment : Fragment() {
 
     private lateinit var binding: FragmentEditPlaceBinding
-    private val selectedPlace: PlaceDB by lazy {
+    private val selectedPlace: Place by lazy {
         EditPlaceFragmentArgs.fromBundle(requireArguments()).place
     }
 
@@ -57,9 +57,9 @@ class EditPlaceFragment : Fragment() {
         inflater.inflate(R.menu.edit_place_menu, menu)
     }
 
-    private fun extractPlaceInfoFromLayout(): PlaceDB {
+    private fun extractPlaceInfoFromLayout(): Place {
         with(binding) {
-            return PlaceDB(selectedPlace.placeId)
+            return Place(selectedPlace.placeId)
                 .also {
                     it.name = placeNameEditText.text.toString()
                     it.importance = importanceEditText.text

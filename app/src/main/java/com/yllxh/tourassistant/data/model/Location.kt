@@ -7,7 +7,7 @@ import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class LocationDB(
+data class Location(
     var latitude: Double = Double.MAX_VALUE,
     var longitude: Double = Double.MAX_VALUE,
     @Embedded

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.yllxh.tourassistant.adapter.PathsAdapter
-import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Path
 import com.yllxh.tourassistant.databinding.FragmentPathsTabBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.main.MainFragmentDirections.actionMainFragmentToEditPathFragment as toEditPathFragment
@@ -39,7 +39,7 @@ class PathsTabFragment : Fragment() {
     }
 
     private fun addNewPath(v: View) {
-        findNavController().navigate(toEditPathFragment(PathDB()))
+        findNavController().navigate(toEditPathFragment(Path()))
     }
 
 }

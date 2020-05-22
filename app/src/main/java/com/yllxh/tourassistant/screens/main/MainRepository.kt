@@ -7,7 +7,7 @@ import com.yllxh.tourassistant.data.source.local.database.AppDatabase
 import com.yllxh.tourassistant.data.source.local.database.dao.CrossReferenceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PathDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PlaceDao
-import com.yllxh.tourassistant.data.source.local.database.entity.PathDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Path
 
 class MainRepository(context: Context) {
 
@@ -26,7 +26,7 @@ class MainRepository(context: Context) {
     val places = placeDao.getAllPlaces()
 
     private val pathsWithPlaces = pathDao.getAllPathsWithPlaces()
-    val paths: LiveData<List<PathDB>> = Transformations.map(pathsWithPlaces) { it ->
+    val paths: LiveData<List<Path>> = Transformations.map(pathsWithPlaces) { it ->
         return@map it.map { it.path }
     }
 }

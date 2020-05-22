@@ -8,10 +8,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "path_table")
-data class PathDB(
+data class Path(
     @PrimaryKey(autoGenerate = true)
     var pathId: Long = 0,
     var name: String = "N/A",
     @Ignore
-    var places: List<PlaceDB> = emptyList()
+    var places: List<Place> = emptyList()
 ) : Parcelable

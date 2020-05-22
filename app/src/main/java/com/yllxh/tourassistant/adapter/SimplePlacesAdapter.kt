@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yllxh.tourassistant.R
-import com.yllxh.tourassistant.data.source.local.database.entity.PlaceDB
+import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.SimplePlaceListItemBinding
 import com.yllxh.tourassistant.utils.setBackGroundColorTo
 
@@ -16,8 +16,8 @@ private const val MIN_ITEMS_COUNT = 3
 class SimplePlacesAdapter(
     private val usesItemCount: Boolean = false,
     usesItemSelection: Boolean = false,
-    private val onItemClickListener: (PlaceDB) -> Unit = {}
-) : ListAdapter<PlaceDB, SimplePlacesAdapter.ViewHolder>(PlaceDiffCallback()), LifecycleObserver {
+    private val onItemClickListener: (Place) -> Unit = {}
+) : ListAdapter<Place, SimplePlacesAdapter.ViewHolder>(PlaceDiffCallback()), LifecycleObserver {
     init {
         if (usesItemSelection) {
             ViewHolder.selectedItems = mutableListOf()
@@ -62,12 +62,12 @@ class SimplePlacesAdapter(
         notifyDataSetChanged()
     }
 
-    fun getSelectedItems(): List<PlaceDB> {
+    fun getSelectedItems(): List<Place> {
         return ViewHolder.selectedItems!!.toList()
     }
 
-    fun setSelectedItems(selectedPlaceDBS: List<PlaceDB>) {
-        ViewHolder.selectedItems?.addAll(selectedPlaceDBS)
+    fun setSelectedItems(selectedPlaces: List<Place>) {
+        ViewHolder.selectedItems?.addAll(selectedPlaces)
     }
 
     fun onDoneUsingSelection() {
@@ -78,25 +78,25 @@ class SimplePlacesAdapter(
     class ViewHolder private constructor(private val binding: SimplePlaceListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            placeDB: PlaceDB,
-            onItemClickListener: (PlaceDB) -> Unit
+            place: Place,
+            onItemClickListener: (Place) -> Unit
         ) {
-            binding.place = placeDB
+            binding.place = place
             binding.placeName.setOnClickListener {
-                onItemClickListener(placeDB)
+                onItemClickListener(place)
 
                 val items = selectedItems ?: return@setOnClickListener
 
-                val isSelected = items.contains(placeDB)
+                val isSelected = items.contains(place)
                 if (isSelected) {
-                    selectedItems?.remove(placeDB)
+                    selectedItems?.remove(place)
                 } else {
-                    selectedItems?.add(placeDB)
+                    selectedItems?.add(place)
                 }
                 it.colorView(!isSelected)
             }
 
-            binding.placeName.colorView(selectedItems?.contains(placeDB))
+            binding.placeName.colorView(selectedItems?.contains(place))
         }
 
         private fun View.colorView(selected: Boolean?) {
@@ -113,7 +113,7 @@ class SimplePlacesAdapter(
 
 
         companion object {
-            var selectedItems: MutableList<PlaceDB>? = null
+            var selectedItems: MutableList<Place>? = null
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = SimplePlaceListItemBinding.inflate(layoutInflater)

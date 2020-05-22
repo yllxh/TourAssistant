@@ -2,25 +2,25 @@ package com.yllxh.tourassistant.data.source.local.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.yllxh.tourassistant.data.source.local.database.entity.ToDoDB
+import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 
 @Dao
 interface ToDoDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertToDo(toDo: ToDoDB)
+    fun insertToDo(toDo: ToDo)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAllToDo(toDos: List<ToDoDB>)
+    fun insertAllToDo(toDos: List<ToDo>)
 
     @Query("SELECT * FROM todo_table WHERE todoId = :todoId")
-    fun getToDo(todoId: Long): LiveData<ToDoDB>
+    fun getToDo(todoId: Long): LiveData<ToDo>
 
     @Update
-    fun updateToDo(toDo: ToDoDB)
+    fun updateToDo(toDo: ToDo)
 
     @Delete
-    fun deleteToDo(toDo: ToDoDB)
+    fun deleteToDo(toDo: ToDo)
 
 
 }
