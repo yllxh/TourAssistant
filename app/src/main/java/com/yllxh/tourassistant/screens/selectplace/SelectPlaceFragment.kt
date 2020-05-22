@@ -3,7 +3,6 @@ package com.yllxh.tourassistant.screens.selectplace
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,15 +14,16 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import android.os.Bundle
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.yllxh.tourassistant.R
-import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentSelectPlaceBinding
+import com.yllxh.tourassistant.utils.*
 import com.yllxh.tourassistant.screens.selectplace.SelectPlaceFragmentDirections.actionSelectPlaceFragmentToEditPlaceFragment as toEditPlaceFragment
 
 
@@ -60,46 +60,37 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentSelectPlaceBinding.inflate(inflater)
 
-        viewModel.selectedPlace.observe(viewLifecycleOwner, Observer {
-            marker?.title = it.location.addressAsString
+        (childFragmentManager
+            .findFragmentById(R.id.mapFragment) as SupportMapFragment)
+            .getMapAsync(this)
 
-            Toast.makeText(requireContext(), it.location.addressAsString, Toast.LENGTH_SHORT).show()
-        })
         autoComplete =
             (childFragmentManager
                 .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment)
                 .apply { setPlaceFields(placeFields) }
 
         autoComplete.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: GoogleApi_Place) {
-                viewModel.setSelectedPlace(place.toPlace())
-                place.latLng?.let {
-                    marker = map.addMarker(
-                        MarkerOptions()
-                            .position(it)
-                    )
-                        .apply { title = selectedPlace.name }
-
-                    map.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(it, 15f)
-                    )
-                }
+            override fun onPlaceSelected(apiPlace: GoogleApi_Place) {
+                viewModel.setSelectedPlace(apiPlace.toPlace())
             }
 
             override fun onError(status: Status) {
-                Toast.makeText(
-                    requireContext(),
-                    "Place could not be retrieved",
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast("Place could not be retrieved")
             }
-
         })
 
-        (childFragmentManager
-            .findFragmentById(R.id.mapFragment) as SupportMapFragment)
-            .getMapAsync(this)
 
+        observe(viewModel.selectedPlace) {
+            if (!::map.isInitialized)
+                return@observe
+
+            marker = map.addSimpleMarker(it)
+            map.animateCamera(it)
+
+            if (!it.location.addressAsString.isEmptyOrBlank()){
+                toast(it.location.addressAsString)
+            }
+        }
 
         binding.fab.setOnClickListener {
             findNavController().navigate(toEditPlaceFragment(selectedPlace))
@@ -108,44 +99,25 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-
         map = googleMap.apply {
 
             if (selectedPlace.location.isValid()) {
-                val latLng = LatLng(
-                    selectedPlace.location.latitude,
-                    selectedPlace.location.longitude
-                )
-                marker = googleMap.addMarker(MarkerOptions().position(latLng))
+                marker = googleMap.addSimpleMarker(selectedPlace)
+                googleMap.animateCamera(selectedPlace)
             }
 
             setOnMapLongClickListener {
                 if (marker != null) {
                     marker?.remove()
                 }
-                marker = googleMap.addMarker(MarkerOptions().position(it))
-                viewModel.setSelectedPlace(
-                    Place(selectedPlace.placeId)
-                        .apply {
-                            location.latitude = it.latitude
-                            location.longitude = it.longitude
-                        })
+                val newPlace = Place(selectedPlace.placeId).apply {
+                    location = Location(it.latitude, it.longitude)
+                    importance = selectedPlace.importance
+                }
+                viewModel.setSelectedPlace(newPlace)
             }
         }
     }
 }
 
-private fun GoogleApi_Place.toPlace(): Place {
-    val latitude = latLng?.latitude ?: Double.MAX_VALUE
-    val longitude = latLng?.longitude ?: Double.MAX_VALUE
 
-    val place = Place()
-    place.name = name ?: ""
-    place.location = Location(
-        latitude = latitude,
-        longitude = longitude,
-        address = Address(address = address ?: "")
-    )
-
-    return place
-}

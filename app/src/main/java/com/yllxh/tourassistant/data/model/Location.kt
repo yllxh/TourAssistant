@@ -45,18 +45,7 @@ data class Location(
     }
 
     fun fillMissingInfo(address: Address){
-        if (addressAsString.isEmptyOrBlank()){
-            addressAsString = address.address
-        }
-        if (country.isEmptyOrBlank()){
-            country = address.country
-        }
-        if (countryCode.isEmptyOrBlank()){
-            countryCode = address.countryCode
-        }
-        if (city.isEmptyOrBlank()){
-            city = address.city
-        }
+        this.address.fillMissingInfo(address)
     }
 
 

@@ -2,6 +2,7 @@ package com.yllxh.tourassistant.data.model
 
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
+import com.yllxh.tourassistant.utils.isEmptyOrBlank
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -22,5 +23,20 @@ data class Address(
                 || city.isEmpty()
                 || country.isEmpty()
                 || countryCode.isEmpty()
+    }
+
+    fun fillMissingInfo(other: Address) {
+        if (address.isEmptyOrBlank()){
+            address = other.address
+        }
+        if (country.isEmptyOrBlank()){
+            country = other.country
+        }
+        if (countryCode.isEmptyOrBlank()){
+            countryCode = other.countryCode
+        }
+        if (city.isEmptyOrBlank()){
+            city = other.city
+        }
     }
 }
