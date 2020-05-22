@@ -15,7 +15,7 @@ import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.act
 class EditPlaceFragment : Fragment() {
 
     private lateinit var binding: FragmentEditPlaceBinding
-    private val place by lazy {
+    private val selectedPlace: PlaceDB by lazy {
         EditPlaceFragmentArgs.fromBundle(requireArguments()).place
     }
 
@@ -34,9 +34,9 @@ class EditPlaceFragment : Fragment() {
     ): View? {
         binding = FragmentEditPlaceBinding.inflate(inflater)
 
-        binding.place = place
+        binding.place = selectedPlace
         binding.editLatLng.setOnClickListener {
-            findNavController().navigate(toSelectPlaceFragment(place))
+            findNavController().navigate(toSelectPlaceFragment(selectedPlace))
         }
         return binding.root
     }
@@ -59,17 +59,16 @@ class EditPlaceFragment : Fragment() {
 
     private fun extractPlaceInfoFromLayout(): PlaceDB {
         with(binding) {
-            return PlaceDB(place!!.placeId)
+            return PlaceDB(selectedPlace.placeId)
                 .also {
                     it.name = placeNameEditText.text.toString()
                     it.importance = importanceEditText.text
                         .toString()
                         .toInt()
-                        .let {return@let if (it < 1) 1 else it}
+                        .let { return@let if (it < 1) 1 else it }
+                    it.location = selectedPlace.location
                     it.location.city = cityEditText.text.toString()
                     it.location.country = countryEditText.text.toString()
-                    it.location.latitude = latEditText.text.toString().toDouble()
-                    it.location.longitude = lngEditText.text.toString().toDouble()
                 }
         }
     }
