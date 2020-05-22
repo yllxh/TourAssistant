@@ -14,7 +14,7 @@ import java.lang.IllegalArgumentException
 data class Place(
     @PrimaryKey(autoGenerate = true)
     val placeId: Long = 0,
-    var name: String = "N/A",
+    var name: String = "",
     private var _importance: Int = 1,
     @Embedded var location: Location = Location()
 ): Parcelable {
