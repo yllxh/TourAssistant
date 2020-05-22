@@ -24,3 +24,7 @@ fun <T> Fragment.observe(
 fun View.setBackGroundColorTo(resId: Int){
     setBackgroundColor(ContextCompat.getColor(context, resId))
 }
+
+fun String.isEmptyOrBlank(): Boolean {
+    return isEmpty() || isBlank()
+}

@@ -3,6 +3,7 @@ package com.yllxh.tourassistant.data.model
 import android.os.Parcelable
 import androidx.room.Embedded
 import com.google.android.gms.maps.model.LatLng
+import com.yllxh.tourassistant.utils.isEmptyOrBlank
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
@@ -13,17 +14,24 @@ data class Location(
     @Embedded
     var address: Address = Address()
 ) : Parcelable {
-    @IgnoredOnParcel var countryCode: String
+
+    @IgnoredOnParcel
+    var countryCode: String
         get() = address.countryCode
         set(value) { address.countryCode = value }
-    @IgnoredOnParcel var addressAsString: String
+
+    @IgnoredOnParcel
+    var addressAsString: String
         get() = address.address
         set(value) { address.address = value }
 
-    @IgnoredOnParcel var country: String
+    @IgnoredOnParcel
+    var country: String
         get() = address.country
         set(value) { address.country = value }
-    @IgnoredOnParcel var city: String
+
+    @IgnoredOnParcel
+    var city: String
         get() = address.city
         set(value) { address.city = value }
 
@@ -37,22 +45,19 @@ data class Location(
     }
 
     fun fillMissingInfo(address: Address){
-        if (addressAsString.isEmpty()
-            || addressAsString.isBlank()){
-
+        if (addressAsString.isEmptyOrBlank()){
             addressAsString = address.address
         }
-        if (country.isBlank() ||
-            country.isEmpty()){
+        if (country.isEmptyOrBlank()){
             country = address.country
         }
-        if (countryCode.isBlank() ||
-            countryCode.isEmpty()){
+        if (countryCode.isEmptyOrBlank()){
             countryCode = address.countryCode
         }
-        if (city.isBlank() ||
-            city.isEmpty()){
+        if (city.isEmptyOrBlank()){
             city = address.city
         }
     }
+
+
 }

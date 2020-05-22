@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
+import com.yllxh.tourassistant.utils.isEmptyOrBlank
 import kotlinx.android.parcel.Parcelize
 import java.lang.IllegalArgumentException
 
@@ -29,7 +30,7 @@ data class Place(
     }
 
     fun fillMissingInfo(address: Address){
-        if (name.isEmpty() || name.isBlank()){
+        if (name.isEmptyOrBlank()){
             name = address.country
         }
         location.fillMissingInfo(address)
