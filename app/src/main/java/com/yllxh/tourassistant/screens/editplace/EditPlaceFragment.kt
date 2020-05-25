@@ -9,7 +9,6 @@ import com.yllxh.tourassistant.R
 
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
-import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToMainFragment as toMainFragment
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment2 as toSelectPlaceFragment
 
 class EditPlaceFragment : Fragment() {
@@ -45,7 +44,7 @@ class EditPlaceFragment : Fragment() {
         return when (item.itemId) {
             R.id.save_place_menu_item -> {
                 viewModel.saveChangesToPlace(extractPlaceInfoFromLayout())
-                findNavController().navigate(toMainFragment())
+                findNavController().navigateUp()
                 true
             }
             else -> super.onOptionsItemSelected(item)
