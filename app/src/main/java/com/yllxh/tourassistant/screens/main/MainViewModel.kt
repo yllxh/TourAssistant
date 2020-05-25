@@ -11,4 +11,5 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     val paths = repository.paths
     val places = repository.places
+    val todos = repository.todos
 }

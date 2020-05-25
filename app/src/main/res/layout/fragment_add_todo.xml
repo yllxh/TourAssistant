@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="todo"
+            type="com.yllxh.tourassistant.data.source.local.database.entity.ToDo" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".screens.addtodo.AddTodoFragment">
+        <SeekBar
+            android:id="@+id/importance_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="@{todo.importance}"
+            android:layout_weight="1"
+            />
+
+        <EditText
+            android:id="@+id/todo_editText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="11"
+            android:ems="10"
+            android:gravity="start|top"
+            android:text="@{todo.note}"
+            android:inputType="textMultiLine" />
+    </LinearLayout>
+</layout>

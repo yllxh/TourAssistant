@@ -16,6 +16,9 @@ interface ToDoDao {
     @Query("SELECT * FROM todo_table WHERE todoId = :todoId")
     fun getToDo(todoId: Long): LiveData<ToDo>
 
+    @Query("SELECT * FROM todo_table")
+    fun getAllToDos(): LiveData<List<ToDo>>
+
     @Update
     fun updateToDo(toDo: ToDo)
 

@@ -12,7 +12,7 @@ data class ToDo(
     @PrimaryKey(autoGenerate = true)
     val todoId: Long = 0,
     val placeUsedId: Long = 0,
-    val note: String = "N/A",
+    var note: String = "N/A",
     private var _importance: Int = 5
 ) : Parcelable {
 
