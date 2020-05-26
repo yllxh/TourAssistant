@@ -71,10 +71,11 @@ class EditPlaceFragment : Fragment() {
     }
 
     private fun extractPlaceInfoFromLayout(): Place = with(binding) {
-        return Place(selectedPlace.placeId,
-            placeNameEditText.text.toString(),
-            importanceSeekBar.progress,
-            selectedPlace.location.also {
+        return selectedPlace.copy(
+            placeId = selectedPlace.placeId,
+            name = placeNameEditText.text.toString(),
+            _importance = importanceSeekBar.progress,
+            location = selectedPlace.location.also {
                 it.city = cityEditText.text.toString()
                 it.country = countryEditText.text.toString()
             })

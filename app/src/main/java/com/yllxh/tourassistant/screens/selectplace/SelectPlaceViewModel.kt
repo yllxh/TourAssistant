@@ -44,7 +44,13 @@ class SelectPlaceViewModel(selectedPlace: Place, app: Application) : AndroidView
     }
 
     fun setSelectedPlace(place: Place) {
-        _selectedPlace.value = place
+        _selectedPlace.value?.let {
+            _selectedPlace.value = place.copy(
+                placeId = it.placeId,
+                _importance = it.importance,
+                toDos = it.toDos
+            )
+        }
 
         if (place.hasMissingInfo()) {
             searchAddressAt(place.location.toLatLng())

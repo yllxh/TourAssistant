@@ -20,12 +20,10 @@ class PlaceRepository(place: Place, context: Context) {
         toDos = db.toDoDao.getToDosWithPlaceId(place.placeId)
     }
 
-    suspend fun saveChangesToPlace(place: Place) {
-        withContext(Dispatchers.IO) {
-            if (place.placeId != 0L)
-                placeDao.updatePlace(place)
-            else
-                placeDao.insertPlace(place)
-        }
+    suspend fun saveChangesToPlace(place: Place) = withContext(Dispatchers.IO) {
+        if (place.placeId != 0L)
+            placeDao.updatePlace(place)
+        else
+            placeDao.insertPlace(place)
     }
 }

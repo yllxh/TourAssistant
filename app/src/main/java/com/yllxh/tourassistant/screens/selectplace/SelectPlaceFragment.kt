@@ -115,10 +115,9 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun onPoiClickListener(poi: PointOfInterest) =
+    private fun onPoiClickListener(poi: PointOfInterest) {
         placesClient.fetchPlace(
-            FetchPlaceRequest.
-                newInstance(poi.placeId, placeFields)
+            FetchPlaceRequest.newInstance(poi.placeId, placeFields)
 
         ).addOnCompleteListener {
             if (!it.isSuccessful)
@@ -128,10 +127,10 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                 viewModel.setSelectedPlace(it.toPlace())
             }
         }
+    }
 
     private fun onMapLongClickListener(latLng: LatLng) {
-        val newPlace = Place(
-            selectedPlace.placeId,
+        val newPlace = selectedPlace.copy(
             location = Location(latLng.latitude, latLng.longitude),
             _importance = selectedPlace.importance
         )
