@@ -109,7 +109,6 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap.apply {
-
             if (selectedPlace.location.isValid()) {
                 marker = googleMap.addSimpleMarker(selectedPlace)
                 googleMap.animateCamera(selectedPlace)

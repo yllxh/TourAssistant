@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
         <variable
-            name="todo"
+            name="toDo"
             type="com.yllxh.tourassistant.data.source.local.database.entity.ToDo" />
     </data>
 
@@ -27,13 +24,13 @@
                 android:id="@+id/importance_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{`Importance: ` + todo.importance}" />
+                android:text="@{`Importance: ` + toDo.importance}" />
 
             <TextView
                 android:id="@+id/note_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{todo.note}" />
+                android:text="@{toDo.note}" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

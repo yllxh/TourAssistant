@@ -31,7 +31,7 @@ class AddTodoFragment : Fragment() {
     ): View? {
         binding = FragmentAddTodoBinding.inflate(inflater)
         binding.todo = todo
-        binding.importanceSeekbar.setOnSeekBarChangeListener(object :
+        binding.importanceSeekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 viewModel.setImportance(progress)

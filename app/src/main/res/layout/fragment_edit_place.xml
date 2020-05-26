@@ -68,13 +68,15 @@
             app:layout_constraintStart_toStartOf="@+id/lat_lng_text_view"
             app:layout_constraintTop_toBottomOf="@+id/lat_lng_text_view" />
 
-        <EditText
-            android:id="@+id/importance_edit_text"
-            android:layout_width="wrap_content"
+        <SeekBar
+            android:id="@+id/importance_seekBar"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{String.valueOf(place.importance)}"
+            android:max="10"
+            android:progress="@{place.importance}"
+            tools:progress="10"
             app:layout_constraintBottom_toBottomOf="@+id/importance_label_text_view"
+            app:layout_constraintEnd_toStartOf="@+id/editLatLng"
             app:layout_constraintStart_toEndOf="@+id/importance_label_text_view"
             app:layout_constraintTop_toTopOf="@+id/importance_label_text_view" />
 
@@ -116,7 +118,7 @@
             app:layout_constraintBottom_toTopOf="@id/add_todo_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/importance_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/importance_label_text_view" />
         <Button
             android:id="@+id/add_todo_button"
             android:layout_width="match_parent"

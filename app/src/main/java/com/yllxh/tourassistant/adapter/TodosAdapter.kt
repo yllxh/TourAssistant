@@ -25,7 +25,7 @@ class TodosAdapter(
             toDo: ToDo,
             onItemClickListener: (ToDo) -> Unit
         ) {
-            binding.todo = toDo
+            binding.toDo = toDo
             binding.root.setOnClickListener {
                 onItemClickListener(toDo)
             }

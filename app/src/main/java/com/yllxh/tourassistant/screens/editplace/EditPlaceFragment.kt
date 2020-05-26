@@ -2,6 +2,7 @@ package com.yllxh.tourassistant.screens.editplace
 
 import android.os.Bundle
 import android.view.*
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -71,19 +72,14 @@ class EditPlaceFragment : Fragment() {
         inflater.inflate(R.menu.edit_place_menu, menu)
     }
 
-    private fun extractPlaceInfoFromLayout(): Place {
-        with(binding) {
-            return Place(selectedPlace.placeId)
-                .also {
-                    it.name = placeNameEditText.text.toString()
-                    it.importance = importanceEditText.text
-                        .toString()
-                        .toInt()
-                        .let { return@let if (it < 1) 1 else it }
-                    it.location = selectedPlace.location
-                    it.location.city = cityEditText.text.toString()
-                    it.location.country = countryEditText.text.toString()
-                }
-        }
+    private fun extractPlaceInfoFromLayout(): Place = with(binding) {
+        return Place(selectedPlace.placeId,
+            placeNameEditText.text.toString(),
+            importanceSeekBar.progress,
+            selectedPlace.location.also {
+                it.city = cityEditText.text.toString()
+                it.country = countryEditText.text.toString()
+            })
     }
+
 }
