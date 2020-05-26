@@ -51,7 +51,9 @@
         tools:layout="@layout/fragment_select_place" >
         <action
             android:id="@+id/action_selectPlaceFragment_to_editPlaceFragment"
-            app:destination="@id/editPlaceFragment" />
+            app:destination="@id/editPlaceFragment"
+            app:popUpTo="@id/editPlaceFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="selectedPlace"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />

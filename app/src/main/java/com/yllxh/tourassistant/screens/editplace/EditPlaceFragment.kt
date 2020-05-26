@@ -35,7 +35,7 @@ class EditPlaceFragment : Fragment() {
 
         binding.place = selectedPlace
         binding.editLatLng.setOnClickListener {
-            findNavController().navigate(toSelectPlaceFragment(selectedPlace))
+            findNavController().navigate(toSelectPlaceFragment(extractPlaceInfoFromLayout()))
         }
         return binding.root
     }
