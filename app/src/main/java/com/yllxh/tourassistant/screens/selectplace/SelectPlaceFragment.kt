@@ -46,7 +46,6 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
         ViewModelProvider(this, factory).get(SelectPlaceViewModel::class.java)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -80,11 +79,13 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
         })
 
         observe(viewModel.selectedPlace) {
-            if (!::map.isInitialized)
+            if (!::map.isInitialized || it.location.isValid())
                 return@observe
+
             marker?.remove()
             marker = map.addSimpleMarker(it)
             map.animateCamera(it)
+
 
             if (!it.location.addressAsString.isEmptyOrBlank()) {
                 marker!!.title = it.location.addressAsString
@@ -92,6 +93,9 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
         }
 
         observe(viewModel.fetchingInfo) {
+            if(selectedPlace.placeId == 0L)
+                return@observe
+
             when (it) {
                 REQUEST.STARTED -> toast("Fetching info...")
                 REQUEST.FINISHED -> toast("Done.")

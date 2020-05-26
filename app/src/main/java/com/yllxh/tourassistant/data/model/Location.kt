@@ -36,8 +36,8 @@ data class Location(
         set(value) { address.city = value }
 
     fun isValid(): Boolean {
-        return (latitude > -90 || latitude < 90)
-                && (longitude > -180 || longitude < 180)
+        return (latitude > -90 && latitude < 90)
+                && (longitude > -180 && longitude < 180)
     }
 
     fun toLatLng(): LatLng {
