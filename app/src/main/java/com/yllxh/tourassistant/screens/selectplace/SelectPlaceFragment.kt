@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import android.os.Bundle
 import android.view.*
+import com.google.android.gms.maps.model.PointOfInterest
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -90,12 +91,13 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        observe(viewModel.fetchingInfo){
-            when(it){
+        observe(viewModel.fetchingInfo) {
+            when (it) {
                 REQUEST.STARTED -> toast("Fetching info...")
                 REQUEST.FINISHED -> toast("Done.")
                 REQUEST.FAILED -> toast("Info not found.")
-                REQUEST.UNKNOWN -> {}
+                REQUEST.UNKNOWN -> {
+                }
             }
         }
         return binding.root
@@ -108,27 +110,32 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                 googleMap.animateCamera(selectedPlace)
             }
 
-            setOnMapLongClickListener {
-                val newPlace = Place(
-                    selectedPlace.placeId,
-                    location = Location(it.latitude, it.longitude),
-                    _importance = selectedPlace.importance
-                )
-                viewModel.setSelectedPlace(newPlace)
-            }
-            setOnPoiClickListener {
-                placesClient.fetchPlace(
-                    FetchPlaceRequest.newInstance(it.placeId, placeFields)
-                ).addOnCompleteListener {
-                    if(!it.isSuccessful)
-                        return@addOnCompleteListener
+            setOnMapLongClickListener(this@SelectPlaceFragment::onMapLongClickListener)
+            setOnPoiClickListener(this@SelectPlaceFragment::onPoiClickListener)
+        }
+    }
 
-                    it.result?.place?.let{
-                        viewModel.setSelectedPlace(it.toPlace())
-                    }
-                }
+    private fun onPoiClickListener(poi: PointOfInterest) =
+        placesClient.fetchPlace(
+            FetchPlaceRequest.
+                newInstance(poi.placeId, placeFields)
+
+        ).addOnCompleteListener {
+            if (!it.isSuccessful)
+                return@addOnCompleteListener
+
+            it.result?.place?.let {
+                viewModel.setSelectedPlace(it.toPlace())
             }
         }
+
+    private fun onMapLongClickListener(latLng: LatLng) {
+        val newPlace = Place(
+            selectedPlace.placeId,
+            location = Location(latLng.latitude, latLng.longitude),
+            _importance = selectedPlace.importance
+        )
+        viewModel.setSelectedPlace(newPlace)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -137,7 +144,7 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        when(item.itemId){
+        when (item.itemId) {
             R.id.save_selected_place -> {
                 findNavController().navigate(toEditPlaceFragment(selectedPlace))
                 true
