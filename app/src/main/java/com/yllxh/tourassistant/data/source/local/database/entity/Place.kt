@@ -18,21 +18,22 @@ data class Place(
     var name: String = "",
     private var _importance: Int = 1,
     @Embedded var location: Location = Location()
-): Parcelable {
+) : Parcelable {
 
     var importance: Int
-    get() = _importance
-    set(value) {
-        if (value < 1 || value > 10)
-            throw IllegalArgumentException("Importance is $value, but should be between 1 and 10.")
+        get() = _importance
+        set(value) {
+            if (value < 1 || value > 10)
+                throw IllegalArgumentException("Importance is $value, but should be between 1 and 10.")
 
-        _importance = value
+            _importance = value
+        }
+
+    fun fillMissingInfo(address: Address) {
+        location.fillMissingInfo(address)
     }
 
-    fun fillMissingInfo(address: Address){
-        if (name.isEmptyOrBlank()){
-            name = address.country
-        }
-        location.fillMissingInfo(address)
+    fun hasMissingInfo(): Boolean {
+        return location.address.hasMissingInfo()
     }
 }

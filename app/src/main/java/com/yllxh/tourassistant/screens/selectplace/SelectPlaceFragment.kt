@@ -83,12 +83,21 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
         observe(viewModel.selectedPlace) {
             if (!::map.isInitialized)
                 return@observe
-
+            marker?.remove()
             marker = map.addSimpleMarker(it)
             map.animateCamera(it)
 
-            if (!it.location.addressAsString.isEmptyOrBlank()){
-                toast(it.location.addressAsString)
+            if (!it.location.addressAsString.isEmptyOrBlank()) {
+                marker!!.title = it.location.addressAsString
+            }
+        }
+
+        observe(viewModel.fetchingInfo){
+            when(it){
+                REQUEST.STARTED -> toast("Fetching info...")
+                REQUEST.FINISHED -> toast("Done.")
+                REQUEST.FAILED -> toast("Info not found.")
+                REQUEST.UNKNOWN -> {}
             }
         }
 
@@ -107,13 +116,12 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             }
 
             setOnMapLongClickListener {
-                if (marker != null) {
-                    marker?.remove()
-                }
-                val newPlace = Place(selectedPlace.placeId).apply {
-                    location = Location(it.latitude, it.longitude)
-                    importance = selectedPlace.importance
-                }
+
+                val newPlace = Place(
+                    selectedPlace.placeId,
+                    location = Location(it.latitude, it.longitude),
+                    _importance = selectedPlace.importance
+                )
                 viewModel.setSelectedPlace(newPlace)
             }
         }
