@@ -1,8 +1,5 @@
 package com.yllxh.tourassistant.screens.selectplace
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +11,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import android.os.Bundle
+import android.view.*
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -50,6 +48,7 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         Places.initialize(requireContext(), getString(R.string.google_maps_key))
         placesClient = Places.createClient(requireContext())
     }
@@ -79,7 +78,6 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             }
         })
 
-
         observe(viewModel.selectedPlace) {
             if (!::map.isInitialized)
                 return@observe
@@ -100,10 +98,6 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                 REQUEST.UNKNOWN -> {}
             }
         }
-
-        binding.fab.setOnClickListener {
-            findNavController().navigate(toEditPlaceFragment(selectedPlace))
-        }
         return binding.root
     }
 
@@ -115,7 +109,6 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             }
 
             setOnMapLongClickListener {
-
                 val newPlace = Place(
                     selectedPlace.placeId,
                     location = Location(it.latitude, it.longitude),
@@ -125,6 +118,20 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.select_path_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when(item.itemId){
+            R.id.save_selected_place -> {
+                findNavController().navigate(toEditPlaceFragment(selectedPlace))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
 }
 
 

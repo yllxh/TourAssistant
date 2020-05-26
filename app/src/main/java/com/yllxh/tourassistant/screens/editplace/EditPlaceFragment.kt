@@ -44,20 +44,19 @@ class EditPlaceFragment : Fragment() {
         binding = FragmentEditPlaceBinding.inflate(inflater)
 
         binding.place = selectedPlace
+        binding.placeTodoRecycleView.adapter = adapter
         binding.editLatLng.setOnClickListener {
             findNavController().navigate(toSelectPlaceFragment(extractPlaceInfoFromLayout()))
         }
         binding.addTodoButton.setOnClickListener {
             findNavController().navigate(toAddTodoFragment(ToDo(placeUsedId = selectedPlace.placeId)))
         }
-        binding.placeTodoRecycleView.adapter = adapter
-
         observe(viewModel.todos, adapter::submitList)
         return binding.root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.save_place_menu_item -> {
                 viewModel.saveChangesToPlace(extractPlaceInfoFromLayout())
                 findNavController().navigateUp()
@@ -65,7 +64,6 @@ class EditPlaceFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
