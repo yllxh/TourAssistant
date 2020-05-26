@@ -10,15 +10,37 @@
             type="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
     </data>
 
-    <TextView
-        android:id="@+id/place_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="24dp"
-        android:layout_marginTop="8dp"
-        android:text="@{place.name}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="place name" />
+        android:layout_margin="4dp">
+
+        <TextView
+            android:id="@+id/place_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:minHeight="24dp"
+            android:text="@{place.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="place name" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:drawableStart="@drawable/ic_favorite_24dp"
+            android:gravity="center_vertical"
+            android:text="@{String.valueOf(place.importance)}"
+            app:layout_constraintBottom_toBottomOf="@+id/place_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/place_name"
+            app:layout_constraintTop_toTopOf="@+id/place_name"
+            tools:text="5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -116,7 +116,7 @@ class SimplePlacesAdapter(
             var selectedItems: MutableList<Place>? = null
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = SimplePlaceListItemBinding.inflate(layoutInflater)
+                val binding = SimplePlaceListItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
