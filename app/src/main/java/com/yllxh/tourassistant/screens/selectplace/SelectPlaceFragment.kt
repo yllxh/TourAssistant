@@ -116,6 +116,18 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                 )
                 viewModel.setSelectedPlace(newPlace)
             }
+            setOnPoiClickListener {
+                placesClient.fetchPlace(
+                    FetchPlaceRequest.newInstance(it.placeId, placeFields)
+                ).addOnCompleteListener {
+                    if(!it.isSuccessful)
+                        return@addOnCompleteListener
+
+                    it.result?.place?.let{
+                        viewModel.setSelectedPlace(it.toPlace())
+                    }
+                }
+            }
         }
     }
 
