@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_editPlaceFragment_to_selectPlaceFragment2"
             app:destination="@id/selectPlaceFragment" />
+        <action
+            android:id="@+id/action_editPlaceFragment_to_addTodoFragment"
+            app:destination="@id/addTodoFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"

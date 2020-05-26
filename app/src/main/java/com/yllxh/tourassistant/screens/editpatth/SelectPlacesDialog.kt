@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.yllxh.tourassistant.adapter.SimplePlacesAdapter
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
-import com.yllxh.tourassistant.data.source.local.database.relation.PathWithPlaces
+import com.yllxh.tourassistant.data.source.local.database.entity.relation.PathWithPlaces
 import com.yllxh.tourassistant.databinding.DialogSelectPlacesBinding
 import com.yllxh.tourassistant.utils.observe
 

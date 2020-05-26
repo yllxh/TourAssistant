@@ -12,25 +12,27 @@ import kotlinx.android.synthetic.main.fragment_add_todo.*
 
 class AddTodoFragment : Fragment() {
     private lateinit var binding: FragmentAddTodoBinding
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(AddToDoViewModel::class.java)
-    }
     private val todo by lazy {
         AddTodoFragmentArgs.fromBundle(requireArguments()).todo
+    }
+    private val viewModel by lazy {
+        val factory = AddToDoViewModelFactory(todo, requireActivity().application)
+        ViewModelProvider(this, factory).get(AddToDoViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddTodoBinding.inflate(inflater)
-        viewModel.setTodo(todo)
         binding.todo = todo
-        binding.importanceSeekbar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener {
+        binding.importanceSeekbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 viewModel.setImportance(progress)
             }
@@ -48,7 +50,7 @@ class AddTodoFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.save){
+        if (item.itemId == R.id.save) {
             viewModel.setNote(binding.todoEditText.text.toString())
             viewModel.save()
             findNavController().navigateUp()

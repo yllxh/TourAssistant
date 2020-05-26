@@ -1,4 +1,4 @@
-package com.yllxh.tourassistant.data.source.local.database.relation
+package com.yllxh.tourassistant.data.source.local.database.entity.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -12,5 +12,9 @@ data class PlaceWithToDos(
         parentColumn = "placeId",
         entityColumn = "placeUsedId"
     )
-    val toDos: List<ToDo>
-)
+    private val toDos: List<ToDo>
+) {
+    init {
+        place.toDos = toDos
+    }
+}

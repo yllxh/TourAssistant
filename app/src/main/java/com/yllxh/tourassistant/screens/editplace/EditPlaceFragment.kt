@@ -6,9 +6,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.yllxh.tourassistant.R
+import com.yllxh.tourassistant.adapter.TodosAdapter
 
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
+import com.yllxh.tourassistant.utils.observe
+import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToAddTodoFragment as toAddTodoFragment
+import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToAddTodoFragment as toAddTodoFragment
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment2 as toSelectPlaceFragment
 
 class EditPlaceFragment : Fragment() {
@@ -19,7 +24,11 @@ class EditPlaceFragment : Fragment() {
     }
 
     private val viewModel by lazy {
-        ViewModelProvider(requireActivity()).get(EditPlaceViewModel::class.java)
+        val factory = EditPlaceViewModelFactory(selectedPlace, requireActivity().application)
+        ViewModelProvider(this, factory).get(EditPlaceViewModel::class.java)
+    }
+    private val adapter by lazy {
+        TodosAdapter { findNavController().navigate(toAddTodoFragment(it)) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +46,12 @@ class EditPlaceFragment : Fragment() {
         binding.editLatLng.setOnClickListener {
             findNavController().navigate(toSelectPlaceFragment(extractPlaceInfoFromLayout()))
         }
+        binding.addTodoButton.setOnClickListener {
+            findNavController().navigate(toAddTodoFragment(ToDo(placeUsedId = selectedPlace.placeId)))
+        }
+        binding.placeTodoRecycleView.adapter = adapter
+
+        observe(viewModel.todos, adapter::submitList)
         return binding.root
     }
 

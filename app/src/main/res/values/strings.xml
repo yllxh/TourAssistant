@@ -16,5 +16,6 @@
     <string name="add_selected">Add Selected</string>
     <string name="lat_lng">%1$.6f</string>
     <string name="edit">Edit</string>
+    <string name="add_todo">Add ToDo</string>
 
 </resources>

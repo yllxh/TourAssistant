@@ -9,9 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddToDoViewModel(app: Application) : AndroidViewModel(app) {
+class AddToDoViewModel(private val todo: ToDo, app: Application) : AndroidViewModel(app) {
     private val toDoDao = AppDatabase.getInstance(getApplication()).toDoDao
-    private lateinit var todo: ToDo
 
     fun setImportance(importance: Int) {
         todo.importance = importance
@@ -30,10 +29,4 @@ class AddToDoViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
     }
-
-    fun setTodo(todo: ToDo) {
-        this.todo = todo
-    }
-
-
 }

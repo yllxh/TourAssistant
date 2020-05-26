@@ -1,4 +1,4 @@
-package com.yllxh.tourassistant.data.source.local.database.relation
+package com.yllxh.tourassistant.data.source.local.database.entity.relation
 
 import androidx.room.Embedded
 import androidx.room.Junction

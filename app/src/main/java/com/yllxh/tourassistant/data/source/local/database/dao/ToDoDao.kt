@@ -25,5 +25,8 @@ interface ToDoDao {
     @Delete
     fun deleteToDo(toDo: ToDo)
 
+    @Query("SELECT * FROM todo_table WHERE placeUsedId = :placeId")
+    fun getToDosWithPlaceId(placeId: Long): LiveData<List<ToDo>>
+
 
 }

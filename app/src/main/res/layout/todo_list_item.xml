@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="todo"
             type="com.yllxh.tourassistant.data.source.local.database.entity.ToDo" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/importance_textView"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="8dp"
+        app:cardCornerRadius="4dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{`Importance: ` + todo.importance}"/>
+            android:layout_margin="4dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/note_textView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:text="@{todo.note}"/>
+            <TextView
+                android:id="@+id/importance_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{`Importance: ` + todo.importance}" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/note_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{todo.note}" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

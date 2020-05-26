@@ -3,7 +3,7 @@ package com.yllxh.tourassistant.data.source.local.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.data.source.local.database.relation.PathWithPlaces
+import com.yllxh.tourassistant.data.source.local.database.entity.relation.PathWithPlaces
 
 @Dao
 interface PathDao {
