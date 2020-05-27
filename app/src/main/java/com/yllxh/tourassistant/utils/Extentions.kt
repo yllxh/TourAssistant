@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import java.lang.IllegalArgumentException
 import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 
 private const val DEFAULT_ZOOM = 15f
@@ -52,7 +53,7 @@ fun GoogleMap.animateCamera(place: Place, zoom: Float = DEFAULT_ZOOM) {
 fun GoogleMap.addSimpleMarker(place: Place): Marker {
     val position = MarkerOptions().position(place.location.toLatLng())
     return addMarker(position).apply {
-        title = when{
+        title = when {
             !place.name.isEmptyOrBlank() -> place.name
             else -> place.location.addressAsString
         }
@@ -77,3 +78,10 @@ fun GoogleApi_Place.toPlace(): Place {
 
     return place
 }
+
+fun String.toggleStrings(str1: String, str2: String): String =
+    when (this) {
+        str1 -> str2
+        str2 -> str1
+        else -> throw IllegalArgumentException("Neither $str1 nor $str2 are equal to $this")
+    }

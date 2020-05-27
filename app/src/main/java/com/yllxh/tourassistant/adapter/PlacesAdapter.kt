@@ -1,12 +1,16 @@
 package com.yllxh.tourassistant.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.PlacesListItemBinding
+import com.yllxh.tourassistant.utils.toggleStrings
 
 class PlacesAdapter(private val onClickListener: (Place) -> Unit)
     : ListAdapter<Place, PlacesAdapter.ViewHolder>(PlaceDiffCallback()) {
@@ -30,8 +34,24 @@ class PlacesAdapter(private val onClickListener: (Place) -> Unit)
             place: Place,
             onClickListener: (Place) -> Unit
         ) {
-            binding.place = place
-            binding.root.setOnClickListener { onClickListener(place) }
+            binding.apply {
+                this.place = place
+                root.setOnClickListener { onClickListener(place) }
+                placeToDoRecycleView.adapter = TodosAdapter().apply { submitList(place.toDos) }
+                showToDosButton.setOnClickListener {
+                    val context = root.context
+                    val currentText = showToDosButton.text.toString()
+                    val visibility = placeToDoRecycleView.visibility
+                    placeToDoRecycleView.visibility = when (visibility) {
+                        View.GONE -> View.VISIBLE
+                        else -> View.GONE
+                    }
+                    showToDosButton.text = currentText.toggleStrings(
+                        context.getString(R.string.hide_toDos),
+                        context.getString(R.string.show_todos)
+                    )
+                }
+            }
         }
 
         companion object {

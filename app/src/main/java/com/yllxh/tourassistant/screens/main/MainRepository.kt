@@ -9,10 +9,11 @@ import com.yllxh.tourassistant.data.source.local.database.dao.PathDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PlaceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.ToDoDao
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
+import com.yllxh.tourassistant.data.source.local.database.entity.Place
 
 class MainRepository(context: Context) {
 
-    private val todosDao: ToDoDao
+    private val toDosDao: ToDoDao
     private val placeDao: PlaceDao
     private val pathDao: PathDao
     private val crossRefDao: CrossReferenceDao
@@ -20,17 +21,20 @@ class MainRepository(context: Context) {
     init {
         val db = AppDatabase.getInstance(context)
 
-        todosDao = db.toDoDao
+        toDosDao = db.toDoDao
         placeDao = db.placeDao
         pathDao = db.pathDao
         crossRefDao = db.crossRefDao
     }
 
-    val places = placeDao.getAllPlaces()
-    val todos = todosDao.getAllToDos()
+    val toDos = toDosDao.getAllToDos()
 
-    private val pathsWithPlaces = pathDao.getAllPathsWithPlaces()
-    val paths: LiveData<List<Path>> = Transformations.map(pathsWithPlaces) { it ->
-        return@map it.map { it.path }
+    val places: LiveData<List<Place>> =
+        Transformations.map(placeDao.getAllPlacesWithToDos()) { placesWithToDos ->
+            placesWithToDos.map { it.place }
+        }
+
+    val paths: LiveData<List<Path>> = Transformations.map(pathDao.getAllPathsWithPlaces()) { it ->
+        it.map { it.path }
     }
 }

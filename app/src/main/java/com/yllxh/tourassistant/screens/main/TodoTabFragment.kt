@@ -35,7 +35,7 @@ class TodoTabFragment : Fragment() {
             findNavController().navigate(toAddTodoFragment(ToDo()))
         }
 
-        observe(viewModel.todos, adapter::submitList)
+        observe(viewModel.toDos, adapter::submitList)
         return binding.root
     }
 

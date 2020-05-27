@@ -17,5 +17,7 @@
     <string name="lat_lng">%1$.6f</string>
     <string name="edit">Edit</string>
     <string name="add_todo">Add ToDo</string>
+    <string name="show_todos">Show ToDos</string>
+    <string name="hide_toDos">Hide ToDos</string>
 
 </resources>

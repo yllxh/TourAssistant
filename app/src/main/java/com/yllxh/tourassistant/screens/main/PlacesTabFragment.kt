@@ -24,16 +24,14 @@ class PlacesTabFragment : Fragment() {
     }
 
     private val placesAdapter by lazy {
-        PlacesAdapter {
-            findNavController().navigate(toEditPlaceFragment(it))
-        }
+        PlacesAdapter { findNavController().navigate(toEditPlaceFragment(it)) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPlacesTabBinding.inflate(inflater)
+        binding = FragmentPlacesTabBinding.inflate(inflater, container, false)
         binding.placesRecycleView.adapter = placesAdapter
         binding.fab.setOnClickListener {
             findNavController().navigate(toSelectPlaceFragment(Place()))

@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:cardCornerRadius="8dp"
-        android:elevation="8dp">
+        android:elevation="8dp"
+        app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:text="@{place.name}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display3"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/importance_label_text_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Place Name" />
@@ -55,36 +55,42 @@
                 tools:text="Country, City" />
 
             <TextView
-                android:id="@+id/lat_lng_text_view"
-                lat_lng_of_place="@{place}"
+                android:id="@+id/importance_label_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:drawableStart="@drawable/ic_favorite_24dp"
+                android:fontFamily="sans-serif"
+                android:text="@{` ` + String.valueOf(place.importance)}"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/pace_name_text_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/pace_name_text_view"
+                tools:text=" 8" />
+
+            <Button
+                android:id="@+id/show_toDos_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-                android:textSize="10sp"
-                app:layout_constraintStart_toStartOf="@+id/country_city_text_view"
-                app:layout_constraintTop_toBottomOf="@+id/country_city_text_view"
-                tools:text="Lat, Lng: " />
+                android:layout_marginBottom="4dp"
+                android:text="@string/hide_toDos"
+                android:textAllCaps="false"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toTopOf="@+id/place_toDo_recycleView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/country_city_text_view" />
 
-            <TextView
-                android:id="@+id/importance_label_text_view"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/place_toDo_recycleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif"
-                android:text="@{`Importance: ` + place.importance}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-                android:textSize="18sp"
+                android:layout_margin="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lat_lng_text_view"
-                tools:text="Importance : 8" />
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

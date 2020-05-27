@@ -9,7 +9,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import com.yllxh.tourassistant.databinding.TodoListItemBinding
 
 class TodosAdapter(
-    private val onItemClickListener: (ToDo) -> Unit
+    private val onItemClickListener: (ToDo) -> Unit = {}
 ) : ListAdapter<ToDo, TodosAdapter.ViewHolder>(ToDoDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
