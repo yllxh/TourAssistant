@@ -79,7 +79,7 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
         })
 
         observe(viewModel.selectedPlace) {
-            if (!::map.isInitialized || it.location.isValid())
+            if (!::map.isInitialized || it.location.isNotValid())
                 return@observe
 
             marker?.remove()
