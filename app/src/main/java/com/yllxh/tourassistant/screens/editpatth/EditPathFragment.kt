@@ -57,7 +57,7 @@ class EditPathFragment : Fragment() {
         return when (item.itemId) {
             R.id.save_path_menu_item -> {
                 val editedPath = extractPathInfoFromLayout()
-                viewModel.saveChangesToPath(editedPath)
+                viewModel.savePath(editedPath)
                 findNavController().navigateUp()
                 true
             }

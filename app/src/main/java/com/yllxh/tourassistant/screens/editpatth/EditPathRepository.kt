@@ -7,7 +7,6 @@ import com.yllxh.tourassistant.data.source.local.database.AppDatabase
 import com.yllxh.tourassistant.data.source.local.database.dao.CrossReferenceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PathDao
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.data.source.local.database.entity.crossreference.PathPlaceCrossRef
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,18 +30,21 @@ class EditPathRepository(
 
     suspend fun savePath(editedPath: Path) = withContext(Dispatchers.IO) {
         removeUnselectedPathPlacesCrossRef(editedPath)
-
-        val listOfCrossRef = mutableListOf<PathPlaceCrossRef>()
-
-        editedPath.places.forEach { place ->
-            listOfCrossRef.add(
-                PathPlaceCrossRef(editedPath.pathId, place.placeId)
-            )
+        if (editedPath.pathId == 0L) {
+            editedPath.pathId = pathDao.insertPath(editedPath)
+        } else {
+            pathDao.updatePath(editedPath)
         }
 
-        pathDao.insertPath(editedPath)
-        crossRefDao.insertCrossRefs(listOfCrossRef)
+        insertCrossRef(editedPath)
+    }
 
+    private fun insertCrossRef(editedPath: Path) = with(mutableListOf<PathPlaceCrossRef>()) {
+
+        editedPath.places.forEach { place ->
+            add(PathPlaceCrossRef(editedPath.pathId, place.placeId))
+        }
+        crossRefDao.insertCrossRefs(this)
     }
 
     private fun removeUnselectedPathPlacesCrossRef(path: Path) {

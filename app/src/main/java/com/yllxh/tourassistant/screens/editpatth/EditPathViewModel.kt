@@ -13,7 +13,7 @@ class EditPathViewModel(path: Path, app: Application) : AndroidViewModel(app) {
 
     val path get() =  repository.path
 
-    fun saveChangesToPath(editedPath: Path) {
+    fun savePath(editedPath: Path) {
         viewModelScope.launch {
             repository.savePath(editedPath)
         }
