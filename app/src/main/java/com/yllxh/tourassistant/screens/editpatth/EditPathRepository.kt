@@ -30,13 +30,18 @@ class EditPathRepository(
 
     suspend fun savePath(editedPath: Path) = withContext(Dispatchers.IO) {
         removeUnselectedPathPlacesCrossRef(editedPath)
+
+        var savedPath = editedPath
+
         if (editedPath.pathId == 0L) {
-            editedPath.pathId = pathDao.insertPath(editedPath)
+            // required to properly insert crossRef
+            val newId = pathDao.insertPath(editedPath)
+            savedPath = editedPath.copy(pathId = newId)
         } else {
             pathDao.updatePath(editedPath)
         }
 
-        insertCrossRef(editedPath)
+        insertCrossRef(savedPath)
     }
 
     private fun insertCrossRef(editedPath: Path) = with(mutableListOf<PathPlaceCrossRef>()) {
