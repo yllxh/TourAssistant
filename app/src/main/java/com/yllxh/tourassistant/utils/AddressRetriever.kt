@@ -7,7 +7,7 @@ import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.yllxh.tourassistant.data.model.Address
-import com.yllxh.tourassistant.screens.selectplace.SelectPlaceViewModel
+import com.yllxh.tourassistant.screens.selectplacemap.SelectPlaceMapViewModel
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,10 +20,10 @@ fun getAddressAt(context: Context, latLng: LatLng): Address {
             Locale.getDefault()
         ).getFromLocation(latLng.latitude, latLng.longitude, 1)
     } catch (ioException: IOException) {
-        Log.e(SelectPlaceViewModel::class.simpleName, "Service Not Available", ioException)
+        Log.e(SelectPlaceMapViewModel::class.simpleName, "Service Not Available", ioException)
     } catch (illegalArgumentException: IllegalArgumentException) {
         Log.e(
-            SelectPlaceViewModel::class.simpleName, "Invalid LatLng: " +
+            SelectPlaceMapViewModel::class.simpleName, "Invalid LatLng: " +
                     "Latitude = ${latLng.latitude}" +
                     ", Longitude = ${latLng.longitude}", illegalArgumentException
         )

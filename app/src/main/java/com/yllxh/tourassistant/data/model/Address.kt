@@ -1,8 +1,6 @@
 package com.yllxh.tourassistant.data.model
 
 import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
-import com.yllxh.tourassistant.utils.isEmptyOrBlank
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -12,30 +10,30 @@ data class Address(
     var country: String = "",
     var countryCode: String = ""
 ) : Parcelable {
-    fun isEmpty(): Boolean{
-        return address.isEmpty()
-                && city.isEmpty()
-                && country.isEmpty()
-                && countryCode.isEmpty()
+    fun isBlank(): Boolean{
+        return address.isBlank()
+                && city.isBlank()
+                && country.isBlank()
+                && countryCode.isBlank()
     }
     fun hasMissingInfo(): Boolean{
-        return address.isEmpty()
-                || city.isEmpty()
-                || country.isEmpty()
-                || countryCode.isEmpty()
+        return address.isBlank()
+                || city.isBlank()
+                || country.isBlank()
+                || countryCode.isBlank()
     }
 
     fun fillMissingInfo(other: Address) {
-        if (address.isEmptyOrBlank()){
+        if (address.isBlank()){
             address = other.address
         }
-        if (country.isEmptyOrBlank()){
+        if (country.isBlank()){
             country = other.country
         }
-        if (countryCode.isEmptyOrBlank()){
+        if (countryCode.isBlank()){
             countryCode = other.countryCode
         }
-        if (city.isEmptyOrBlank()){
+        if (city.isBlank()){
             city = other.city
         }
     }

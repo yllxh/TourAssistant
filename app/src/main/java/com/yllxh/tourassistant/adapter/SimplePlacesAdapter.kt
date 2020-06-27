@@ -15,31 +15,26 @@ private const val MIN_ITEMS_COUNT = 3
 
 class SimplePlacesAdapter(
     private val usesItemCount: Boolean = false,
-    usesItemSelection: Boolean = false,
+    private val usesItemSelection: Boolean = false,
     private val onItemClickListener: (Place) -> Unit = {}
 ) : ListAdapter<Place, SimplePlacesAdapter.ViewHolder>(PlaceDiffCallback()), LifecycleObserver {
-    init {
-        if (usesItemSelection) {
-            ViewHolder.selectedItems = mutableListOf()
-        }
-    }
 
     private var count = MIN_ITEMS_COUNT
     private val realCount get() = currentList.size
-
     private var _isCollapsed: Boolean = usesItemCount
     val isCollapsed get() = _isCollapsed
 
+    private var selectedPlaces = mutableListOf<Place>()
+
     override fun getItemCount(): Int {
-        return if (usesItemCount && super.getItemCount() > MIN_ITEMS_COUNT) {
-            count
-        } else {
-            super.getItemCount()
+        return when {
+            usesItemCount && super.getItemCount() > MIN_ITEMS_COUNT -> count
+            else -> super.getItemCount()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        return from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -62,41 +57,43 @@ class SimplePlacesAdapter(
         notifyDataSetChanged()
     }
 
-    fun getSelectedItems(): List<Place> {
-        return ViewHolder.selectedItems!!.toList()
-    }
-
     fun setSelectedItems(selectedPlaces: List<Place>) {
-        ViewHolder.selectedItems?.addAll(selectedPlaces)
+        this.selectedPlaces = selectedPlaces.toMutableList()
+        notifyDataSetChanged()
     }
 
-    fun onDoneUsingSelection() {
-        ViewHolder.selectedItems = null
+    fun getSelectedItems(): List<Place> {
+        return selectedPlaces
     }
 
-
-    class ViewHolder private constructor(private val binding: SimplePlaceListItemBinding) :
+    fun from(parent: ViewGroup): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = SimplePlaceListItemBinding.inflate(layoutInflater, parent, false)
+        return ViewHolder(binding)
+    }
+    inner class ViewHolder (private val binding: SimplePlaceListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             place: Place,
             onItemClickListener: (Place) -> Unit
         ) {
             binding.place = place
+            binding.placeName.colorView(selectedPlaces.contains(place))
             binding.placeName.setOnClickListener {
                 onItemClickListener(place)
+                if (!usesItemSelection)
+                    return@setOnClickListener
 
-                val items = selectedItems ?: return@setOnClickListener
-
-                val isSelected = items.contains(place)
-                if (isSelected) {
-                    selectedItems?.remove(place)
+                val isSelected = if (place in selectedPlaces) {
+                    selectedPlaces.remove(place)
+                    false
                 } else {
-                    selectedItems?.add(place)
+                    selectedPlaces.add(place)
+                    true
                 }
-                it.colorView(!isSelected)
+                it.colorView(isSelected)
             }
 
-            binding.placeName.colorView(selectedItems?.contains(place))
         }
 
         private fun View.colorView(selected: Boolean?) {
@@ -107,20 +104,8 @@ class SimplePlacesAdapter(
             } else {
                 R.color.nonSelectedItemColor
             }
-
             setBackGroundColorTo(color)
         }
 
-
-        companion object {
-            var selectedItems: MutableList<Place>? = null
-            fun from(parent: ViewGroup): ViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = SimplePlaceListItemBinding.inflate(layoutInflater, parent, false)
-                return ViewHolder(binding)
-            }
-        }
-
     }
-
 }

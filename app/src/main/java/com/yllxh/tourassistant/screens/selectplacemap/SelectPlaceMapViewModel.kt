@@ -1,4 +1,4 @@
-package com.yllxh.tourassistant.screens.selectplace
+package com.yllxh.tourassistant.screens.selectplacemap
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -11,7 +11,7 @@ enum class REQUEST {
     STARTED, FINISHED, FAILED, UNKNOWN
 }
 
-class SelectPlaceViewModel(selectedPlace: Place, app: Application) : AndroidViewModel(app) {
+class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidViewModel(app) {
 
     private val _selectedPlace = MutableLiveData(selectedPlace)
     val selectedPlace: LiveData<Place> get() = _selectedPlace
@@ -20,7 +20,7 @@ class SelectPlaceViewModel(selectedPlace: Place, app: Application) : AndroidView
     val fetchingInfo: LiveData<REQUEST> get() = _fetchingInfo
 
     init {
-        if (selectedPlace.location.address.isEmpty()){
+        if (selectedPlace.location.address.isBlank()){
             searchAddressAt(selectedPlace.location.toLatLng())
         }
     }
@@ -30,7 +30,7 @@ class SelectPlaceViewModel(selectedPlace: Place, app: Application) : AndroidView
         _fetchingInfo.value = REQUEST.STARTED
         withContext(Dispatchers.IO) {
             val address = getAddressAt(getApplication(), latLng)
-            if (address.isEmpty()) {
+            if (address.isBlank()) {
                 _fetchingInfo.postValue(REQUEST.FAILED)
                 return@withContext
             }

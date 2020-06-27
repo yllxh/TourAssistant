@@ -1,14 +1,12 @@
-package com.yllxh.tourassistant.screens.selectplace
+package com.yllxh.tourassistant.screens.selectplacemap
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import android.os.Bundle
 import android.view.*
@@ -23,7 +21,7 @@ import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentSelectPlaceBinding
 import com.yllxh.tourassistant.utils.*
-import com.yllxh.tourassistant.screens.selectplace.SelectPlaceFragmentDirections.actionSelectPlaceFragmentToEditPlaceFragment as toEditPlaceFragment
+import com.yllxh.tourassistant.screens.selectplacemap.SelectPlaceMapFragmentDirections.actionSelectPlaceFragmentToEditPlaceFragment as toEditPlaceFragment
 
 
 private val placeFields = listOf(
@@ -33,7 +31,7 @@ private val placeFields = listOf(
     GoogleApi_Place.Field.LAT_LNG
 )
 
-class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
+class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var autoComplete: AutocompleteSupportFragment
     private lateinit var placesClient: PlacesClient
@@ -41,9 +39,9 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
     private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
     private lateinit var binding: FragmentSelectPlaceBinding
     private val viewModel by lazy {
-        val place = SelectPlaceFragmentArgs.fromBundle(requireArguments()).selectedPlace
-        val factory = SelectPlaceViewModelFactory(place, requireActivity().application)
-        ViewModelProvider(this, factory).get(SelectPlaceViewModel::class.java)
+        val place = SelectPlaceMapFragmentArgs.fromBundle(requireArguments()).selectedPlace
+        val factory = SelectPlaceMapViewModelFactory(place, requireActivity().application)
+        ViewModelProvider(this, factory).get(SelectPlaceMapViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +85,7 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
             map.animateCamera(it)
 
 
-            if (!it.location.addressAsString.isEmptyOrBlank()) {
+            if (!it.location.addressAsString.isBlank()) {
                 marker!!.title = it.location.addressAsString
             }
         }
@@ -114,8 +112,8 @@ class SelectPlaceFragment : Fragment(), OnMapReadyCallback {
                 googleMap.animateCamera(selectedPlace)
             }
 
-            setOnMapLongClickListener(this@SelectPlaceFragment::onMapLongClickListener)
-            setOnPoiClickListener(this@SelectPlaceFragment::onPoiClickListener)
+            setOnMapLongClickListener(this@SelectPlaceMapFragment::onMapLongClickListener)
+            setOnPoiClickListener(this@SelectPlaceMapFragment::onPoiClickListener)
         }
     }
 

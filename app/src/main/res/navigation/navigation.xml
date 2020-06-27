@@ -14,8 +14,8 @@
             android:name="place"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
         <action
-            android:id="@+id/action_editPlaceFragment_to_selectPlaceFragment2"
-            app:destination="@id/selectPlaceFragment" />
+            android:id="@+id/action_editPlaceFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceMapFragment" />
         <action
             android:id="@+id/action_editPlaceFragment_to_addTodoFragment"
             app:destination="@id/addTodoFragment" />
@@ -26,17 +26,17 @@
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <action
+            android:id="@+id/action_mainFragment_to_addTodoFragment"
+            app:destination="@id/addTodoFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_editPlaceFragment"
             app:destination="@id/editPlaceFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceMapFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_editPathFragment"
             app:destination="@id/editPathFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_selectPlaceFragment"
-            app:destination="@id/selectPlaceFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_addTodoFragment"
-            app:destination="@id/addTodoFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPathFragment"
@@ -46,20 +46,23 @@
         <argument
             android:name="path"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+        <action
+            android:id="@+id/action_editPathFragment_to_selectPlacesFragment"
+            app:destination="@id/selectPlacesFragment" />
     </fragment>
     <fragment
-        android:id="@+id/selectPlaceFragment"
-        android:name="com.yllxh.tourassistant.screens.selectplace.SelectPlaceFragment"
+        android:id="@+id/selectPlaceMapFragment"
+        android:name="com.yllxh.tourassistant.screens.selectplacemap.SelectPlaceMapFragment"
         android:label="fragment_select_place"
         tools:layout="@layout/fragment_select_place" >
+        <argument
+            android:name="selectedPlace"
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
         <action
             android:id="@+id/action_selectPlaceFragment_to_editPlaceFragment"
             app:destination="@id/editPlaceFragment"
             app:popUpTo="@id/editPlaceFragment"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="selectedPlace"
-            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Place" />
     </fragment>
     <fragment
         android:id="@+id/addTodoFragment"
@@ -68,5 +71,18 @@
         <argument
             android:name="todo"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.ToDo" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectPlacesFragment"
+        android:name="com.yllxh.tourassistant.screens.selectplaces.SelectPlacesFragment"
+        android:label="SelectPlacesFragment" >
+        <argument
+            android:name="path"
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+        <action
+            android:id="@+id/action_selectPlacesFragment_to_editPathFragment"
+            app:destination="@id/editPathFragment"
+            app:popUpTo="@id/editPathFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

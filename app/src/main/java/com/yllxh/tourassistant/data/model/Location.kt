@@ -3,7 +3,6 @@ package com.yllxh.tourassistant.data.model
 import android.os.Parcelable
 import androidx.room.Embedded
 import com.google.android.gms.maps.model.LatLng
-import com.yllxh.tourassistant.utils.isEmptyOrBlank
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
@@ -38,6 +37,7 @@ data class Location(
     fun isValid(): Boolean {
         return !isNotValid()
     }
+
     fun isNotValid(): Boolean {
         return latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180
     }

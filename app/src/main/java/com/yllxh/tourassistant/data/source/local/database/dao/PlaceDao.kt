@@ -9,13 +9,13 @@ import com.yllxh.tourassistant.data.source.local.database.entity.relation.PlaceW
 @Dao
 interface PlaceDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPlace(place: Place): Long
 
     @Query("SELECT * FROM place_table")
     fun getAllPlaces(): LiveData<List<Place>>
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     fun updatePlace(place: Place)
 //
 //    @Insert(onConflict = OnConflictStrategy.IGNORE)

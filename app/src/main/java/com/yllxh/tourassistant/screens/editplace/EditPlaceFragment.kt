@@ -14,8 +14,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToAddTodoFragment as toAddTodoFragment
-import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToAddTodoFragment as toAddTodoFragment
-import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment2 as toSelectPlaceFragment
+import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment as toSelectPlaceFragment
 
 class EditPlaceFragment : Fragment() {
 

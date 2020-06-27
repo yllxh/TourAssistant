@@ -1,7 +1,5 @@
 package com.yllxh.tourassistant.screens.editpatth
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -12,15 +10,17 @@ import com.yllxh.tourassistant.adapter.SimplePlacesAdapter
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
 import com.yllxh.tourassistant.databinding.FragmentEditPathBinding
 import com.yllxh.tourassistant.utils.observe
+import com.yllxh.tourassistant.screens.editpatth.EditPathFragmentDirections.actionEditPathFragmentToSelectPlacesFragment as toSelectPlacesFragment
 
 class EditPathFragment : Fragment() {
     private lateinit var binding: FragmentEditPathBinding
-    private val adapter by lazy { SimplePlacesAdapter() }
-    private val path by lazy {
+    private val simplePlacesAdapter by lazy { SimplePlacesAdapter() }
+
+    private val selectedPath by lazy {
         EditPathFragmentArgs.fromBundle(requireArguments()).path
     }
     private val viewModel by lazy {
-        val factory = EditPathViewModelFactory(path, requireActivity().application)
+        val factory = EditPathViewModelFactory(selectedPath, requireActivity().application)
 
         ViewModelProvider(this, factory).get(EditPathViewModel::class.java)
     }
@@ -34,32 +34,19 @@ class EditPathFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentEditPathBinding.inflate(inflater)
-        binding.simplePlacesRecycleView.adapter = adapter
+        binding = FragmentEditPathBinding.inflate(inflater, container, false)
+        binding.simplePlacesRecycleView.adapter = simplePlacesAdapter
         binding.viewModel = viewModel
 
-        binding.addRemovePalcesButton.setOnClickListener(::onAddRemovePlaces)
+        binding.addRemovePalcesButton.setOnClickListener{
+            findNavController().navigate(toSelectPlacesFragment(selectedPath))
+        }
 
-        observe(viewModel.path) { adapter.submitList(it.places) }
+        observe(viewModel.path) { simplePlacesAdapter.submitList(it.places) }
 
         return binding.root
     }
 
-    private fun onAddRemovePlaces(v: View) {
-        SelectPlacesDialog.newInstance(this, viewModel.path.value?.places)
-            .show(parentFragmentManager, SelectPlacesDialog.TAG)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK
-            && requestCode == SelectPlacesDialog.SELECT_PLACES_DIALOG_REQUEST
-        ) {
-            val selectedPlaces = SelectPlacesDialog.extractData(data)
-            viewModel.setSelectedPlaces(selectedPlaces)
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -79,7 +66,7 @@ class EditPathFragment : Fragment() {
     }
 
     private fun extractPathInfoFromLayout(): Path {
-        return Path().apply {
+        return selectedPath.apply {
             name = binding.placeNameEditText.text.toString()
         }
     }
