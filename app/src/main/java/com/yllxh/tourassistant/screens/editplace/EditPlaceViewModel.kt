@@ -10,7 +10,7 @@ class EditPlaceViewModel(place: Place, app: Application) : AndroidViewModel(app)
 
     private val repository = PlaceRepository(place, app.applicationContext)
 
-    val todos: LiveData<List<ToDo>> get() = repository.toDos
+    val toDos: LiveData<List<ToDo>> get() = repository.toDos
 
     fun saveChangesToPlace(place: Place) = viewModelScope.launch {
         repository.saveChangesToPlace(place)

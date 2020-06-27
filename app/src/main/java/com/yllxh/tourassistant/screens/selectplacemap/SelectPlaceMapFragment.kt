@@ -35,8 +35,11 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var autoComplete: AutocompleteSupportFragment
     private lateinit var placesClient: PlacesClient
+
     private var marker: Marker? = null
+
     private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
+
     private lateinit var binding: FragmentSelectPlaceBinding
     private val viewModel by lazy {
         val place = SelectPlaceMapFragmentArgs.fromBundle(requireArguments()).selectedPlace

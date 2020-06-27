@@ -9,7 +9,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.relation.PlaceW
 @Dao
 interface PlaceDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun insertPlace(place: Place): Long
 
     @Query("SELECT * FROM place_table")

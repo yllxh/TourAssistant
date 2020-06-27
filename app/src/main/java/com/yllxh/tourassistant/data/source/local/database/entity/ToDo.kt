@@ -11,7 +11,7 @@ import java.lang.IllegalArgumentException
 data class ToDo(
     @PrimaryKey(autoGenerate = true)
     val todoId: Long = 0,
-    val placeUsedId: Long = 0,
+    val placeUsedId: Long = -1, // important to distinguish ToDos that do not belong to any Place
     var note: String = "N/A",
     private var _importance: Int = 5
 ) : Parcelable {

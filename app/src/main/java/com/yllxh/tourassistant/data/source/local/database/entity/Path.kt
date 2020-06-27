@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "path_table")
 data class Path(
     @PrimaryKey(autoGenerate = true)
-    val pathId: Long = 0,
+    var pathId: Long = 0,
     var name: String = "N/A",
     @Ignore
     var places: List<Place> = emptyList()

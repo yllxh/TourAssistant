@@ -2,7 +2,6 @@ package com.yllxh.tourassistant.screens.editplace
 
 import android.os.Bundle
 import android.view.*
-import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -14,6 +13,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import com.yllxh.tourassistant.databinding.FragmentEditPlaceBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToAddTodoFragment as toAddTodoFragment
+import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToMainFragment as toMainFragment
 import com.yllxh.tourassistant.screens.editplace.EditPlaceFragmentDirections.actionEditPlaceFragmentToSelectPlaceFragment as toSelectPlaceFragment
 
 class EditPlaceFragment : Fragment() {
@@ -50,7 +50,7 @@ class EditPlaceFragment : Fragment() {
         binding.addTodoButton.setOnClickListener {
             findNavController().navigate(toAddTodoFragment(ToDo(placeUsedId = selectedPlace.placeId)))
         }
-        observe(viewModel.todos, adapter::submitList)
+        observe(viewModel.toDos, adapter::submitList)
         return binding.root
     }
 
@@ -58,7 +58,7 @@ class EditPlaceFragment : Fragment() {
         when (item.itemId) {
             R.id.save_place_menu_item -> {
                 viewModel.saveChangesToPlace(extractPlaceInfoFromLayout())
-                findNavController().navigateUp()
+                findNavController().navigate(toMainFragment())
                 true
             }
             else -> super.onOptionsItemSelected(item)
