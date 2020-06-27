@@ -11,11 +11,11 @@ interface PathDao {
     @Insert
     fun insertPath(path: Path): Long
 
-    @Query("SELECT * FROM path_table")
+    @Query("SELECT * FROM path_table ORDER BY pathId DESC")
     fun getAllPaths(): LiveData<List<Path>>
 
     @Transaction
-    @Query("SELECT * FROM path_table")
+    @Query("SELECT * FROM path_table ORDER BY pathId DESC")
     fun getAllPathsWithPlaces(): LiveData<List<PathWithPlaces>>
 
 //

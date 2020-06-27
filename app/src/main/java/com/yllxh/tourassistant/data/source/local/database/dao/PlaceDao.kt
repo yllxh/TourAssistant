@@ -12,7 +12,7 @@ interface PlaceDao {
     @Insert
     fun insertPlace(place: Place): Long
 
-    @Query("SELECT * FROM place_table")
+    @Query("SELECT * FROM place_table ORDER BY placeId DESC")
     fun getAllPlaces(): LiveData<List<Place>>
 
     @Update
@@ -22,7 +22,7 @@ interface PlaceDao {
 //    fun insertAllPlaces(places: List<Place>)
 //
     @Transaction
-    @Query("SELECT * FROM place_table")
+    @Query("SELECT * FROM place_table ORDER BY placeId DESC")
     fun getAllPlacesWithToDos(): LiveData<List<PlaceWithToDos>>
 //
 //    @Transaction
