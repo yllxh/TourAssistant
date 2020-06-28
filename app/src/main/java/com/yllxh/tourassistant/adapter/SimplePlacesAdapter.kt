@@ -79,19 +79,21 @@ class SimplePlacesAdapter(
         ) {
             binding.place = place
             binding.placeName.colorView(selectedPlaces.contains(place))
+            binding.root.colorView(selectedPlaces.contains(place))
             binding.placeName.setOnClickListener {
                 onItemClickListener(place)
                 if (!usesItemSelection)
                     return@setOnClickListener
 
-                val isSelected = if (place in selectedPlaces) {
+                val isSelected = place in selectedPlaces
+                if (isSelected) {
                     selectedPlaces.remove(place)
-                    false
                 } else {
                     selectedPlaces.add(place)
-                    true
                 }
-                it.colorView(isSelected)
+
+                binding.root.colorView(!isSelected)
+                it.colorView(!isSelected)
             }
 
         }
@@ -102,7 +104,7 @@ class SimplePlacesAdapter(
             val color = if (selected) {
                 R.color.selectedItemColor
             } else {
-                R.color.nonSelectedItemColor
+                android.R.color.background_light
             }
             setBackGroundColorTo(color)
         }

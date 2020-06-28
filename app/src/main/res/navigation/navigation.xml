@@ -39,6 +39,9 @@
             android:id="@+id/action_mainFragment_to_selectPlaceFragment"
             app:destination="@id/selectPlaceMapFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_viewPathFragment2"
+            app:destination="@id/viewPathFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_editPathFragment"
             app:destination="@id/editPathFragment" />
     </fragment>
@@ -88,5 +91,17 @@
             app:destination="@id/editPathFragment"
             app:popUpTo="@id/editPathFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewPathFragment"
+        android:name="com.yllxh.tourassistant.screens.viewpath.ViewPathFragment"
+        android:label="ViewPathFragment"
+        tools:layout="@layout/fragment_view_path">
+        <action
+            android:id="@+id/action_viewPathFragment_to_editPathFragment"
+            app:destination="@id/editPathFragment" />
+        <argument
+            android:name="path"
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
     </fragment>
 </navigation>

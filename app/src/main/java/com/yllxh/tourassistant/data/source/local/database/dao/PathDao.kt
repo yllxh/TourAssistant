@@ -26,6 +26,9 @@ interface PathDao {
     @Update
     fun updatePath(path: Path)
 
+    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
+    fun getPath(pathId: Long): LiveData<PathWithPlaces>
+
 //    @Transaction
 //    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
 }

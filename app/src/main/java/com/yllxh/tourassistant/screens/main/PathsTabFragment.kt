@@ -13,12 +13,13 @@ import com.yllxh.tourassistant.data.source.local.database.entity.Path
 import com.yllxh.tourassistant.databinding.FragmentPathsTabBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.main.MainFragmentDirections.actionMainFragmentToEditPathFragment as toEditPathFragment
+import com.yllxh.tourassistant.screens.main.MainFragmentDirections.actionMainFragmentToViewPathFragment2 as toViewPathFragment
 
 class PathsTabFragment : Fragment() {
     private lateinit var binding: FragmentPathsTabBinding
     private val pathsAdapter by lazy {
         PathsAdapter {
-            findNavController().navigate(toEditPathFragment(it))
+            findNavController().navigate(toViewPathFragment(it))
         }
     }
     private val viewModel by lazy {
@@ -41,5 +42,7 @@ class PathsTabFragment : Fragment() {
     private fun addNewPath(v: View) {
         findNavController().navigate(toEditPathFragment(Path()))
     }
+
+
 
 }
