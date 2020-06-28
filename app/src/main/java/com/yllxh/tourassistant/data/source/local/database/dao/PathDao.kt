@@ -29,6 +29,9 @@ interface PathDao {
     @Query("SELECT * FROM path_table WHERE pathId = :pathId")
     fun getPath(pathId: Long): LiveData<PathWithPlaces>
 
+    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
+    fun getRawPath(pathId: Long): PathWithPlaces
+
 //    @Transaction
 //    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
 }

@@ -29,7 +29,6 @@ class EditPathRepository(
     private val originallySelectedPlaces = path.places.toList()
 
     suspend fun savePath(editedPath: Path) = withContext(Dispatchers.IO) {
-        removeUnselectedPathPlacesCrossRef(editedPath)
 
         var savedPath = editedPath
 
@@ -38,6 +37,7 @@ class EditPathRepository(
             val newId = pathDao.insertPath(editedPath)
             savedPath = editedPath.copy(pathId = newId)
         } else {
+            removeUnselectedPathPlacesCrossRef(editedPath)
             pathDao.updatePath(editedPath)
         }
 
@@ -54,11 +54,11 @@ class EditPathRepository(
 
     private fun removeUnselectedPathPlacesCrossRef(path: Path) {
         val currentlySelected = path.places
-        val unselectedPlaces = originallySelectedPlaces.filter {
+        val unselectedPlaces = pathDao.getRawPath(path.pathId).path.places.filter {
             !currentlySelected.contains(it)
         }
 
-        with(mutableListOf<PathPlaceCrossRef>()) {
+        with(mutableListOf<PathPlaceCrossRef>()) { // cross reference to be be removed
 
             unselectedPlaces.forEach {
                 add(PathPlaceCrossRef(path.pathId, it.placeId))

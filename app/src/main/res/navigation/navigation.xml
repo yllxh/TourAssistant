@@ -69,7 +69,7 @@
             android:id="@+id/action_selectPlaceFragment_to_editPlaceFragment"
             app:destination="@id/editPlaceFragment"
             app:popUpTo="@id/editPlaceFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/addTodoFragment"
@@ -102,6 +102,17 @@
             app:destination="@id/editPathFragment" />
         <argument
             android:name="path"
+            app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
+        <action
+            android:id="@+id/action_viewPathFragment_to_followPathFragment"
+            app:destination="@id/followPathFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followPathFragment"
+        android:name="com.yllxh.tourassistant.screens.followPath.FollowPathFragment"
+        android:label="fragment_follow_path"
+        tools:layout="@layout/fragment_follow_path" >
+        <argument android:name="path"
             app:argType="com.yllxh.tourassistant.data.source.local.database.entity.Path" />
     </fragment>
 </navigation>

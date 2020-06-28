@@ -10,6 +10,7 @@ import com.yllxh.tourassistant.adapter.SimplePlacesAdapter
 import com.yllxh.tourassistant.databinding.FragmentViewPathBinding
 import com.yllxh.tourassistant.utils.observe
 import com.yllxh.tourassistant.screens.viewpath.ViewPathFragmentDirections.actionViewPathFragmentToEditPathFragment as toEditPathFragment
+import com.yllxh.tourassistant.screens.viewpath.ViewPathFragmentDirections.actionViewPathFragmentToFollowPathFragment as toFollowPathFragment
 
 class ViewPathFragment : Fragment() {
     private lateinit var binding: FragmentViewPathBinding
@@ -50,6 +51,10 @@ class ViewPathFragment : Fragment() {
         return when (item.itemId) {
             R.id.edit_path_menu_item -> {
                 findNavController().navigate(toEditPathFragment(viewModel.path.value!!))
+                true
+            }
+            R.id.start_path_menu_item -> {
+                findNavController().navigate(toFollowPathFragment(viewModel.path.value!!))
                 true
             }
             else -> super.onOptionsItemSelected(item)

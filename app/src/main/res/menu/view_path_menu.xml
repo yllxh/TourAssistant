@@ -3,7 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/edit_path_menu_item"
-        android:title="@string/edit"
+        android:id="@+id/start_path_menu_item"
+        android:icon="@drawable/ic_play"
+        android:title="Start"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/edit_path_menu_item"
+        android:title="@string/edit" />
 </menu>

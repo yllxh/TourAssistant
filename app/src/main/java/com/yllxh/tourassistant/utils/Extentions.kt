@@ -37,6 +37,9 @@ fun GoogleMap.animateCamera(place: Place, zoom: Float = DEFAULT_ZOOM) {
         )
     )
 }
+fun Location.toMapsModelLatLng(): com.google.maps.model.LatLng {
+    return com.google.maps.model.LatLng(latitude, longitude)
+}
 
 fun GoogleMap.addSimpleMarker(place: Place): Marker {
     val position = MarkerOptions().position(place.location.toLatLng())

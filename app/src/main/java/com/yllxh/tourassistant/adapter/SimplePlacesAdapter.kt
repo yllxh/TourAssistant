@@ -104,7 +104,7 @@ class SimplePlacesAdapter(
             val color = if (selected) {
                 R.color.selectedItemColor
             } else {
-                android.R.color.background_light
+                R.color.nonSelectedItemColor
             }
             setBackGroundColorTo(color)
         }

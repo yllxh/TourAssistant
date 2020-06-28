@@ -64,10 +64,9 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
             .findFragmentById(R.id.mapFragment) as SupportMapFragment)
             .getMapAsync(this)
 
-        autoComplete =
-            (childFragmentManager
-                .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment)
-                .apply { setPlaceFields(placeFields) }
+        autoComplete = (childFragmentManager
+            .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment)
+            .apply { setPlaceFields(placeFields) }
 
         autoComplete.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(apiPlace: GoogleApi_Place) {
@@ -94,7 +93,7 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         }
 
         observe(viewModel.fetchingInfo) {
-            if(selectedPlace.placeId == 0L)
+            if (selectedPlace.placeId == 0L)
                 return@observe
 
             when (it) {
