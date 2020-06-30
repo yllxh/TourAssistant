@@ -1,5 +1,7 @@
 package com.yllxh.tourassistant.utils
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -8,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.yllxh.tourassistant.data.model.Address
@@ -33,6 +36,14 @@ fun GoogleMap.animateCamera(place: Place, zoom: Float = DEFAULT_ZOOM) {
     this.animateCamera(
         CameraUpdateFactory.newLatLngZoom(
             place.location.toLatLng(),
+            zoom
+        )
+    )
+}
+fun GoogleMap.animateCameraAt(latLng: LatLng, zoom: Float = DEFAULT_ZOOM) {
+    this.animateCamera(
+        CameraUpdateFactory.newLatLngZoom(
+            latLng,
             zoom
         )
     )
@@ -74,3 +85,7 @@ fun String.toggleStrings(str1: String, str2: String): String =
         str2 -> str1
         else -> throw IllegalArgumentException("Neither $str1 nor $str2 are equal to $this")
     }
+
+fun onMainThread(runnable: () -> Unit){
+    Handler(Looper.getMainLooper()).post(runnable)
+}

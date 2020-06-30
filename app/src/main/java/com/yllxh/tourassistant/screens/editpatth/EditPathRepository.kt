@@ -26,7 +26,6 @@ class EditPathRepository(
 
     private val _path = MutableLiveData(path)
     val path: LiveData<Path> get() = _path
-    private val originallySelectedPlaces = path.places.toList()
 
     suspend fun savePath(editedPath: Path) = withContext(Dispatchers.IO) {
 
