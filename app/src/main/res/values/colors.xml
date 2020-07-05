@@ -6,4 +6,6 @@
 
     <color name="selectedItemColor">#80C3BC</color>
     <color name="nonSelectedItemColor">#fafafa</color>
+    <color name="trackingUserColor">#3D5AFE</color>
+    <color name="stoppedTrackingUserColor">#2E2E2E</color>
 </resources>

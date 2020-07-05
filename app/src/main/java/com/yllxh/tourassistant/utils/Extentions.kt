@@ -17,6 +17,7 @@ import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import java.lang.IllegalArgumentException
+import kotlin.math.max
 import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 
 private const val DEFAULT_ZOOM = 15f
@@ -32,21 +33,13 @@ fun View.setBackGroundColorTo(resId: Int) {
     setBackgroundColor(ContextCompat.getColor(context, resId))
 }
 
-fun GoogleMap.animateCamera(place: Place, zoom: Float = DEFAULT_ZOOM) {
-    this.animateCamera(
-        CameraUpdateFactory.newLatLngZoom(
-            place.location.toLatLng(),
-            zoom
-        )
-    )
+fun GoogleMap.animateCameraAt(place: Place, zoom: Float = DEFAULT_ZOOM) {
+    this.animateCameraAt(place.location.toLatLng(), zoom)
 }
 fun GoogleMap.animateCameraAt(latLng: LatLng, zoom: Float = DEFAULT_ZOOM) {
+    val camZoom = cameraPosition.zoom
     this.animateCamera(
-        CameraUpdateFactory.newLatLngZoom(
-            latLng,
-            zoom
-        )
-    )
+        CameraUpdateFactory.newLatLngZoom(latLng, max(camZoom, zoom)))
 }
 fun Location.toMapsModelLatLng(): com.google.maps.model.LatLng {
     return com.google.maps.model.LatLng(latitude, longitude)
@@ -89,3 +82,8 @@ fun String.toggleStrings(str1: String, str2: String): String =
 fun onMainThread(runnable: () -> Unit){
     Handler(Looper.getMainLooper()).post(runnable)
 }
+
+fun Location.toPlace(): Place {
+    return Place(name = this.addressAsString, location = this)
+}
+

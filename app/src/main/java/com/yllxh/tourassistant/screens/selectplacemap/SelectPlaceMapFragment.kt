@@ -1,18 +1,26 @@
 package com.yllxh.tourassistant.screens.selectplacemap
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.PorterDuff
+import android.net.Uri
+import android.os.Bundle
+import android.provider.Settings
+import android.view.*
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.libraries.places.api.Places
-import android.os.Bundle
-import android.view.*
 import com.google.android.gms.maps.model.PointOfInterest
+import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
@@ -21,6 +29,7 @@ import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentSelectPlaceBinding
 import com.yllxh.tourassistant.utils.*
+import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 import com.yllxh.tourassistant.screens.selectplacemap.SelectPlaceMapFragmentDirections.actionSelectPlaceFragmentToEditPlaceFragment as toEditPlaceFragment
 
 
@@ -35,12 +44,12 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var autoComplete: AutocompleteSupportFragment
     private lateinit var placesClient: PlacesClient
-
     private var marker: Marker? = null
 
-    private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
+    private lateinit var locationRetriever: LocationRetriever
 
     private lateinit var binding: FragmentSelectPlaceBinding
+    private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
     private val viewModel by lazy {
         val place = SelectPlaceMapFragmentArgs.fromBundle(requireArguments()).selectedPlace
         val factory = SelectPlaceMapViewModelFactory(place, requireActivity().application)
@@ -77,14 +86,25 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
                 toast("Place could not be retrieved")
             }
         })
-
+        binding.trackUserLocationButton.setOnClickListener {
+            if (locationRetriever.keepTrackOfUser) {
+                locationRetriever.keepTrackOfUser = false
+                binding.trackUserLocationButton.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.stoppedTrackingUserColor), PorterDuff.Mode.SRC_ATOP)
+            } else {
+                locationRetriever.keepTrackOfUser = true
+                locationRetriever.requestDeviceLocation()
+                binding.trackUserLocationButton.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.trackingUserColor), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
         observe(viewModel.selectedPlace) {
             if (!::map.isInitialized || it.location.isNotValid())
                 return@observe
 
             marker?.remove()
             marker = map.addSimpleMarker(it)
-            map.animateCamera(it)
+            map.animateCameraAt(it)
 
 
             if (!it.location.addressAsString.isBlank()) {
@@ -104,19 +124,81 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
+
         return binding.root
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap.apply {
+            isMyLocationEnabled = true
+            uiSettings.isMyLocationButtonEnabled = false
+            if (requireContext().hasLocationPermission()) {
+                binding.trackUserLocationButton.isEnabled = true
+            } else {
+                binding.trackUserLocationButton.isEnabled = false
+                onMissingLocationPermission()
+            }
             if (selectedPlace.location.isValid()) {
-                marker = googleMap.addSimpleMarker(selectedPlace)
-                googleMap.animateCamera(selectedPlace)
+                marker = addSimpleMarker(selectedPlace)
+                animateCameraAt(selectedPlace)
             }
 
             setOnMapLongClickListener(this@SelectPlaceMapFragment::onMapLongClickListener)
             setOnPoiClickListener(this@SelectPlaceMapFragment::onPoiClickListener)
         }
+
+        locationRetriever = LocationRetriever(
+            this,
+            onLocationReceived = viewModel::updateUserLocation,
+            onMissingPermission = this::onMissingLocationPermission
+        )
+
+        locationRetriever.requestDeviceLocation()
+
+        observe(viewModel.userLocation) {
+            if (locationRetriever.keepTrackOfUser)
+                map.animateCameraAt(it)
+        }
+    }
+    private fun onMissingLocationPermission() {
+        requestLocationPermission(
+            onDenied = { isPermanent ->
+                showAlertDialogForLocationPermission (onOk = {
+
+                    if (!isPermanent) {
+                        onMissingLocationPermission()
+                    } else {
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            data = Uri.fromParts("package", "com.yllxh.tourassistant", null)
+
+                            startActivity(this)
+                        }
+                    }
+                })
+            },
+            onRationaleShouldBeShown = {
+                if (it != null)
+                    showAlertDialogForLocationPermission(
+                        it::continuePermissionRequest,
+                        it::cancelPermissionRequest
+                    )
+            })
+    }
+
+    private fun showAlertDialogForLocationPermission(
+        onOk: () -> Unit = {},
+        onDeny: () -> Unit = {}
+    ) {
+        AlertDialog.Builder(requireContext())
+            .setMessage("Permission is required so to show you location on the map.")
+            .setPositiveButton("ok") { _, _ ->
+                onOk()
+            }
+            .setNegativeButton("Deny") { _, _ ->
+                onDeny()
+            }.create().show()
     }
 
     private fun onPoiClickListener(poi: PointOfInterest) {
