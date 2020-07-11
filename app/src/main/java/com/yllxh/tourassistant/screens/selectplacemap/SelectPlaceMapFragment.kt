@@ -89,13 +89,11 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         binding.trackUserLocationButton.setOnClickListener {
             if (locationRetriever.keepTrackOfUser) {
                 locationRetriever.keepTrackOfUser = false
-                binding.trackUserLocationButton.setColorFilter(
-                    ContextCompat.getColor(requireContext(), R.color.stoppedTrackingUserColor), PorterDuff.Mode.SRC_ATOP)
+                binding.trackUserLocationButton.setColor(R.color.stoppedTrackingUserColor)
             } else {
                 locationRetriever.keepTrackOfUser = true
                 locationRetriever.requestDeviceLocation()
-                binding.trackUserLocationButton.setColorFilter(
-                    ContextCompat.getColor(requireContext(), R.color.trackingUserColor), PorterDuff.Mode.SRC_ATOP)
+                binding.trackUserLocationButton.setColor(R.color.trackingUserColor)
             }
         }
         observe(viewModel.selectedPlace) {
@@ -131,11 +129,12 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap.apply {
-            isMyLocationEnabled = true
             uiSettings.isMyLocationButtonEnabled = false
-            if (requireContext().hasLocationPermission()) {
+            if (hasLocationPermission()) {
+                isMyLocationEnabled = true
                 binding.trackUserLocationButton.isEnabled = true
             } else {
+                isMyLocationEnabled = false
                 binding.trackUserLocationButton.isEnabled = false
                 onMissingLocationPermission()
             }
@@ -151,7 +150,7 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         locationRetriever = LocationRetriever(
             this,
             onLocationReceived = viewModel::updateUserLocation,
-            onMissingPermission = this::onMissingLocationPermission
+            onMissingPermission = { onMissingLocationPermission() }
         )
 
         locationRetriever.requestDeviceLocation()
@@ -160,45 +159,6 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
             if (locationRetriever.keepTrackOfUser)
                 map.animateCameraAt(it)
         }
-    }
-    private fun onMissingLocationPermission() {
-        requestLocationPermission(
-            onDenied = { isPermanent ->
-                showAlertDialogForLocationPermission (onOk = {
-
-                    if (!isPermanent) {
-                        onMissingLocationPermission()
-                    } else {
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            data = Uri.fromParts("package", "com.yllxh.tourassistant", null)
-
-                            startActivity(this)
-                        }
-                    }
-                })
-            },
-            onRationaleShouldBeShown = {
-                if (it != null)
-                    showAlertDialogForLocationPermission(
-                        it::continuePermissionRequest,
-                        it::cancelPermissionRequest
-                    )
-            })
-    }
-
-    private fun showAlertDialogForLocationPermission(
-        onOk: () -> Unit = {},
-        onDeny: () -> Unit = {}
-    ) {
-        AlertDialog.Builder(requireContext())
-            .setMessage("Permission is required so to show you location on the map.")
-            .setPositiveButton("ok") { _, _ ->
-                onOk()
-            }
-            .setNegativeButton("Deny") { _, _ ->
-                onDeny()
-            }.create().show()
     }
 
     private fun onPoiClickListener(poi: PointOfInterest) {

@@ -1,10 +1,16 @@
 package com.yllxh.tourassistant.utils
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
@@ -13,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
@@ -71,6 +78,49 @@ fun GoogleApi_Place.toPlace(): Place {
         )
     }
 }
+
+private fun Fragment.showAlertDialogForLocationPermission(
+    onOk: () -> Unit = {},
+    onDeny: () -> Unit = {}
+) {
+    AlertDialog.Builder(requireContext())
+        .setMessage("Permission is required so to show you location on the map.")
+        .setPositiveButton("ok") { _, _ ->
+            onOk()
+        }
+        .setNegativeButton("Deny") { _, _ ->
+            onDeny()
+        }.create().show()
+}
+
+fun Fragment.onMissingLocationPermission(onGranted: () -> Unit = {}) {
+    requestLocationPermission(
+        onGranted = onGranted,
+        onDenied = { isPermanent ->
+            showAlertDialogForLocationPermission (onOk = {
+
+                if (!isPermanent) {
+                    onMissingLocationPermission()
+                } else {
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        data = Uri.fromParts("package", "com.yllxh.tourassistant", null)
+
+                        startActivity(this)
+                    }
+                }
+            })
+        },
+        onRationaleShouldBeShown = {
+            if (it != null)
+                showAlertDialogForLocationPermission(
+                    it::continuePermissionRequest,
+                    it::cancelPermissionRequest
+                )
+        })
+}
+fun ImageView.setColor(id: Int) = setColorFilter(ContextCompat.getColor(context, id))
+
 
 fun String.toggleStrings(str1: String, str2: String): String =
     when (this) {

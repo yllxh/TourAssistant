@@ -27,7 +27,7 @@ class LocationRetriever(
 
     @SuppressLint("MissingPermission")
     fun requestDeviceLocation() {
-        if (!fragment.requireContext().hasLocationPermission()) {
+        if (!fragment.hasLocationPermission()) {
             locationPermissionGranted = false
             isWorking = false
             onMissingPermission()

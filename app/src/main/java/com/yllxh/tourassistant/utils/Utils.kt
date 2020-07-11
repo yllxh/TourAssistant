@@ -18,9 +18,9 @@ import com.karumi.dexter.listener.single.PermissionListener
 
 
 
-fun Context.hasLocationPermission(): Boolean {
+fun Fragment.hasLocationPermission(): Boolean {
 
-    return ActivityCompat.checkSelfPermission(this,
+    return ActivityCompat.checkSelfPermission(requireContext(),
         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
