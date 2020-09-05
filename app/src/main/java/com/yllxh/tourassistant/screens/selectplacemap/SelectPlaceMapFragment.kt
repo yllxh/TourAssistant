@@ -1,14 +1,8 @@
 package com.yllxh.tourassistant.screens.selectplacemap
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.PorterDuff
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.*
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -89,11 +83,11 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         binding.trackUserLocationButton.setOnClickListener {
             if (locationRetriever.keepTrackOfUser) {
                 locationRetriever.keepTrackOfUser = false
-                binding.trackUserLocationButton.setColor(R.color.stoppedTrackingUserColor)
+                binding.trackUserLocationButton.setColor(R.color.colorStoppedTrackingUser)
             } else {
                 locationRetriever.keepTrackOfUser = true
                 locationRetriever.requestDeviceLocation()
-                binding.trackUserLocationButton.setColor(R.color.trackingUserColor)
+                binding.trackUserLocationButton.setColor(R.color.colorTrackingUser)
             }
         }
         observe(viewModel.selectedPlace) {

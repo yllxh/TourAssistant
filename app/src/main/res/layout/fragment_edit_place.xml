@@ -11,122 +11,175 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#E0F7FA">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/country_name"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/place_name_edit_text" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/city_name"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/country_edit_text" />
 
         <EditText
             android:id="@+id/place_name_edit_text"
-            android:layout_width="387dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:fontFamily="sans-serif"
             android:hint="@string/place_name"
             android:text="@{place.name}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textSize="24sp"
+            android:textColor="@color/colorEditText"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="@+id/textView2"
+            tools:text="@string/place_name" />
 
         <EditText
             android:id="@+id/country_edit_text"
-            android:layout_width="186dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif"
             android:hint="@string/country_name"
             android:text="@{place.location.country}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textSize="14sp"
+            android:textColor="@color/colorEditText"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView4"
+            app:layout_constraintEnd_toEndOf="@+id/place_name_edit_text"
             app:layout_constraintStart_toStartOf="@+id/place_name_edit_text"
-            app:layout_constraintTop_toBottomOf="@+id/place_name_edit_text" />
+            app:layout_constraintTop_toTopOf="@+id/textView4"
+            tools:text="@string/country_name" />
 
         <EditText
             android:id="@+id/city_edit_text"
-            android:layout_width="186dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif"
             android:hint="@string/city_name"
             android:text="@{place.location.city}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/country_edit_text"
-            app:layout_constraintTop_toBottomOf="@+id/place_name_edit_text" />
+            android:textColor="@color/colorEditText"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintEnd_toEndOf="@+id/country_edit_text"
+            app:layout_constraintStart_toStartOf="@+id/country_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/textView3"
+            tools:text="@string/city_name" />
 
         <TextView
             android:id="@+id/importance_label_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="sans-serif"
             android:text="@string/importance"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textColor="@color/colorText"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="@+id/lat_lng_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/lat_lng_text_view" />
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/city_edit_text" />
 
         <SeekBar
             android:id="@+id/importance_seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:max="10"
             android:progress="@{place.importance}"
-            tools:progress="10"
             app:layout_constraintBottom_toBottomOf="@+id/importance_label_text_view"
-            app:layout_constraintEnd_toStartOf="@+id/editLatLng"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/importance_label_text_view"
-            app:layout_constraintTop_toTopOf="@+id/importance_label_text_view" />
+            app:layout_constraintTop_toTopOf="@+id/importance_label_text_view"
+            tools:progress="10" />
+
+        <TextView
+            android:id="@+id/lat_lng_text_view"
+            lat_lng_of_place="@{place}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/editLatLng"
+            app:layout_constraintStart_toStartOf="@+id/editLatLng"
+            app:layout_constraintTop_toBottomOf="@+id/editLatLng"
+            tools:text="Lat, Lng: 22.22222, 33,33333" />
 
         <ImageButton
             android:id="@+id/editLatLng"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:src="@drawable/ic_edit_location_black_48dp"
-            app:layout_constraintBottom_toBottomOf="@+id/lat_lng_text_view"
-            app:layout_constraintEnd_toEndOf="@+id/city_edit_text"
-            app:layout_constraintTop_toTopOf="@+id/lat_lng_text_view" />
-
-        <TextView
-            android:id="@+id/lat_lng_text_view"
-            lat_lng_of_place="@{place}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/editLatLng"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/country_edit_text"
-            tools:text="Lat, Lng: " />
+            app:layout_constraintTop_toBottomOf="@+id/importance_seekBar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/place_todo_recycleView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/add_todo_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/importance_label_text_view" />
+            app:layout_constraintBottom_toTopOf="@+id/add_todo_button"
+            app:layout_constraintTop_toBottomOf="@+id/lat_lng_text_view"
+            tools:layout_editor_absoluteX="8dp" />
+
         <Button
             android:id="@+id/add_todo_button"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#B5E1DD"
             android:text="@string/add_todo"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/place_todo_recycleView" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/place_name"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
