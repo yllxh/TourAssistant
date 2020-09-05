@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
-import com.yllxh.tourassistant.databinding.PlacesListItemBinding
+import com.yllxh.tourassistant.databinding.ItemPlacesListBinding
 import com.yllxh.tourassistant.utils.toggleStrings
 
 class PlacesAdapter(private val onClickListener: (Place) -> Unit)
@@ -27,7 +27,7 @@ class PlacesAdapter(private val onClickListener: (Place) -> Unit)
         holder.bind(getItem(position), onClickListener)
     }
 
-    class ViewHolder private constructor(private val binding: PlacesListItemBinding) :
+    class ViewHolder private constructor(private val binding: ItemPlacesListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             place: Place,
@@ -56,7 +56,7 @@ class PlacesAdapter(private val onClickListener: (Place) -> Unit)
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = PlacesListItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemPlacesListBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

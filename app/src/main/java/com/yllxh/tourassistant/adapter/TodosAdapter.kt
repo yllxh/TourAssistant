@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
-import com.yllxh.tourassistant.databinding.TodoListItemBinding
+import com.yllxh.tourassistant.databinding.ItemTodoListBinding
 
 class TodosAdapter(
     private val onItemClickListener: (ToDo) -> Unit = {}
@@ -19,7 +19,7 @@ class TodosAdapter(
         holder.bind(getItem(position), onItemClickListener)
     }
 
-    class ViewHolder private constructor(private val binding: TodoListItemBinding) :
+    class ViewHolder private constructor(private val binding: ItemTodoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             toDo: ToDo,
@@ -34,7 +34,7 @@ class TodosAdapter(
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = TodoListItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemTodoListBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

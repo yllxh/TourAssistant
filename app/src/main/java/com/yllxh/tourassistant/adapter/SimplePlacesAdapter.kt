@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
-import com.yllxh.tourassistant.databinding.SimplePlaceListItemBinding
+import com.yllxh.tourassistant.databinding.ItemSimplePlaceListBinding
 import com.yllxh.tourassistant.utils.setBackGroundColorTo
 
 private const val MIN_ITEMS_COUNT = 3
@@ -68,10 +68,10 @@ class SimplePlacesAdapter(
 
     fun from(parent: ViewGroup): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = SimplePlaceListItemBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemSimplePlaceListBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
-    inner class ViewHolder (private val binding: SimplePlaceListItemBinding) :
+    inner class ViewHolder (private val binding: ItemSimplePlaceListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             place: Place,
@@ -102,9 +102,9 @@ class SimplePlacesAdapter(
             selected ?: return
 
             val color = if (selected) {
-                R.color.selectedItemColor
+                R.color.colorSelectedItem
             } else {
-                R.color.nonSelectedItemColor
+                R.color.colorNonSelectedItem
             }
             setBackGroundColorTo(color)
         }

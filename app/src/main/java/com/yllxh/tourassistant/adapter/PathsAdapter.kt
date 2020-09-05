@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.databinding.PathListItemBinding
+import com.yllxh.tourassistant.databinding.ItemPathListBinding
 
 class PathsAdapter(
     private val onItemClickListener: (Path) -> Unit
@@ -21,7 +21,7 @@ class PathsAdapter(
         holder.bind(getItem(position), onItemClickListener)
     }
 
-    class ViewHolder private constructor(private val binding: PathListItemBinding) :
+    class ViewHolder private constructor(private val binding: ItemPathListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             path: Path,
@@ -58,7 +58,7 @@ class PathsAdapter(
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = PathListItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemPathListBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
