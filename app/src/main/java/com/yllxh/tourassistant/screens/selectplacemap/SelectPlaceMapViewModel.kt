@@ -6,8 +6,7 @@ import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 import com.yllxh.tourassistant.data.model.Location as ModelLocation
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
-import com.yllxh.tourassistant.utils.getAddressAt
-import com.yllxh.tourassistant.utils.hasLocationPermission
+import com.yllxh.tourassistant.utils.getAddress
 import com.yllxh.tourassistant.utils.toPlace
 import kotlinx.coroutines.*
 
@@ -36,7 +35,7 @@ class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidV
         viewModelScope.launch {
             _fetchingInfo.value = REQUEST.STARTED
             withContext(Dispatchers.IO) {
-                val address = getAddressAt(getApplication(), latLng)
+                val address = latLng.getAddress(getApplication())
                 if (address.isBlank()) {
                     _fetchingInfo.postValue(REQUEST.FAILED)
                     return@withContext
