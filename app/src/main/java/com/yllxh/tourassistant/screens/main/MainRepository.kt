@@ -10,6 +10,8 @@ import com.yllxh.tourassistant.data.source.local.database.dao.PlaceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.ToDoDao
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import com.yllxh.tourassistant.data.source.local.database.entity.relation.PathWithPlaces
+import com.yllxh.tourassistant.data.source.local.database.entity.relation.PlaceWithToDos
 
 class MainRepository(context: Context) {
 
@@ -31,10 +33,9 @@ class MainRepository(context: Context) {
 
     val places: LiveData<List<Place>> =
         Transformations.map(placeDao.getAllPlacesWithToDos()) { placesWithToDos ->
-            placesWithToDos.map { it.place }
+            placesWithToDos.map(PlaceWithToDos::place)
         }
 
-    val paths: LiveData<List<Path>> = Transformations.map(pathDao.getAllPathsWithPlaces()) { it ->
-        it.map { it.path }
-    }
+    val paths: LiveData<List<Path>> =
+        Transformations.map(pathDao.getAllPathsWithPlaces()) { it.map(PathWithPlaces::path) }
 }
