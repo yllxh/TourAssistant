@@ -11,13 +11,16 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#009688"
         android:elevation="8dp"
-        app:cardCornerRadius="4dp">
+        android:minHeight="48dp"
+        app:cardCornerRadius="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="4dp"
             android:orientation="horizontal">
 
@@ -25,10 +28,12 @@
                 android:id="@+id/importance_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:drawableStart="@drawable/ic_favorite_24dp"
                 android:text="@{` ` + toDo.importance}"
-                android:layout_gravity="center_vertical"
-                tools:text=" 8"/>
+                android:textColor="@color/colorTextLight"
+                android:textSize="18sp"
+                tools:text=" 8" />
 
             <TextView
                 android:id="@+id/note_textView"
@@ -36,7 +41,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
-                android:text="@{toDo.note}" />
+                android:maxLines="2"
+                android:text="@{toDo.note}"
+                android:textColor="@color/colorTextLight"
+                android:textSize="18sp"
+                tools:text="This is a note tha will be shown on a todo list item and should should not be compleatly shown just enough to fill the first line of the view where it will be displayed." />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
