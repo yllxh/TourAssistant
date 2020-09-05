@@ -57,10 +57,10 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
         binding.trackUserLocationButton.setOnClickListener {
             if (viewModel.trackUser) {
                 viewModel.trackUser = false
-                binding.trackUserLocationButton.setColor(R.color.stoppedTrackingUserColor)
+                binding.trackUserLocationButton.setColor(R.color.colorStoppedTrackingUser)
             } else {
                 viewModel.trackUser = true
-                binding.trackUserLocationButton.setColor(R.color.trackingUserColor)
+                binding.trackUserLocationButton.setColor(R.color.colorTrackingUser)
             }
         }
 
@@ -100,6 +100,7 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
                     val routes = result?.routes
                         ?: return@onMainThread
                     for (route in routes) {
+                        viewModel.onDirectionRouteRetrieved(route)
                         val decodedPath: MutableList<LatLng> =
                             PolylineEncoding.decode(route.overviewPolyline.encodedPath)
 
@@ -110,6 +111,7 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
                         addPolyline.color =
                             ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark)
                         addPolyline.width = 10f
+
                     }
                 }
             })
