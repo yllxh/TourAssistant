@@ -12,20 +12,20 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-fun getAddressAt(context: Context, latLng: LatLng): Address {
+fun LatLng.getAddress(context: Context): Address {
     var addresses: List<AndroidAddress>? = null
     try {
         addresses = Geocoder(
             context,
             Locale.getDefault()
-        ).getFromLocation(latLng.latitude, latLng.longitude, 1)
+        ).getFromLocation(latitude, longitude, 1)
     } catch (ioException: IOException) {
         Log.e(SelectPlaceMapViewModel::class.simpleName, "Service Not Available", ioException)
     } catch (illegalArgumentException: IllegalArgumentException) {
         Log.e(
             SelectPlaceMapViewModel::class.simpleName, "Invalid LatLng: " +
-                    "Latitude = ${latLng.latitude}" +
-                    ", Longitude = ${latLng.longitude}", illegalArgumentException
+                    "Latitude = $latitude" +
+                    ", Longitude = $longitude", illegalArgumentException
         )
     }
 
