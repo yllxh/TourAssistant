@@ -29,7 +29,7 @@ class TodoTabFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTodoTabBinding.inflate(inflater)
+        binding = FragmentTodoTabBinding.inflate(inflater, container, false)
         binding.todosRecycleView.adapter = adapter
         binding.fab.setOnClickListener {
             findNavController().navigate(toAddTodoFragment(ToDo()))
