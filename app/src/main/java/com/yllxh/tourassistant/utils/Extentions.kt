@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
@@ -19,12 +18,12 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import java.lang.IllegalArgumentException
 import kotlin.math.max
+import kotlin.math.pow
 import com.google.android.libraries.places.api.model.Place as GoogleApi_Place
 
 private const val DEFAULT_ZOOM = 15f
@@ -137,3 +136,13 @@ fun Location.toPlace(): Place {
     return Place(name = this.addressAsString, location = this)
 }
 
+fun Double.isEqualTo(other: Double, precision:Int = 6): Boolean {
+    val pow = 10.0.pow(precision)
+    return (this * pow).toInt() == (other * pow).toInt()
+}
+fun com.google.maps.model.LatLng.isEqualTo(other: com.google.maps.model.LatLng, precision:Int = 6)
+        = (lat.isEqualTo(other.lat) && lng.isEqualTo(other.lng, precision))
+
+fun com.google.maps.model.LatLng.toLatLng(): LatLng {
+    return LatLng(lat, lng)
+}
