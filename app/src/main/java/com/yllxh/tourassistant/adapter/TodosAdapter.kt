@@ -9,6 +9,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import com.yllxh.tourassistant.databinding.ItemTodoListBinding
 
 class TodosAdapter(
+    private val isNested: Boolean = false,
     private val onItemClickListener: (ToDo) -> Unit = {}
 ) : ListAdapter<ToDo, TodosAdapter.ViewHolder>(ToDoDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -16,15 +17,17 @@ class TodosAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClickListener)
+        holder.bind(getItem(position), isNested, onItemClickListener)
     }
 
     class ViewHolder private constructor(private val binding: ItemTodoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             toDo: ToDo,
+            isInNestedRecycleView: Boolean,
             onItemClickListener: (ToDo) -> Unit
         ) {
+            binding.isInNestedRecycleView = isInNestedRecycleView
             binding.toDo = toDo
             binding.root.setOnClickListener {
                 onItemClickListener(toDo)
