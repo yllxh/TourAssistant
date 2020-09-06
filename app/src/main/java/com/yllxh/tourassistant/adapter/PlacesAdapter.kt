@@ -36,7 +36,7 @@ class PlacesAdapter(private val onClickListener: (Place) -> Unit)
             binding.apply {
                 this.place = place
                 root.setOnClickListener { onClickListener(place) }
-                placeToDoRecycleView.adapter = TodosAdapter().apply { submitList(place.toDos) }
+                placeToDoRecycleView.adapter = TodosAdapter(isNested = true).apply { submitList(place.toDos) }
                 showToDosButton.setOnClickListener {
                     val context = root.context
                     val currentText = showToDosButton.text.toString()
