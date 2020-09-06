@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#09cd7c</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
+    <color name="colorPrimaryDark">#009b4f</color>
 
-    <color name="colorSelectedItem">#80C3BC</color>
-    <color name="colorNonSelectedItem">#fafafa</color>
+    <color name="colorAccent">#61ffac</color>
 
-    <color name="colorTrackingUser">#3D5AFE</color>
-    <color name="colorStoppedTrackingUser">#2E2E2E</color>
+    <color name="colorSelectedItem">@color/colorPrimary</color>
 
-    <color name="colorEditText">#B5009688</color>
-    <color name="colorText">#009688</color>
-    <color name="colorTextLight">#E0F7FA</color>
+    <color name="colorTrackingUser">@color/colorAccent</color>
+    <color name="colorStoppedTrackingUser">@color/colorPrimaryDark</color>
 
-    <color name="colorButton">#B5E1DD</color>
-    <color name="colorButtonText">#B5E1DD</color>
+    <color name="colorDivider">#BDBDBD</color>
 
-    <color name="colorBackground">#E0F7FA</color>
+    <color name="colorText">#757575</color>
+    <color name="colorTextHalfTransparent">#99757575</color>
+    <color name="colorTextLight">#FFFFFF</color>
+    <color name="colorTextDark">#212121</color>
+    <color name="colorTextPrimaryDark">#009b4f</color>
+
+    <color name="colorButton">@color/colorAccent</color>
+    <color name="colorButtonText">@color/colorText</color>
+
+    <color name="colorBackground">#E6E5E5</color>
+    <color name="colorBackgroundDark">@color/colorPrimaryDark</color>
+    <color name="colorItemBackground">#FFFFFF</color>
 </resources>
