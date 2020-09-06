@@ -3,10 +3,9 @@
 
     <string name="place_lat_lng_template">Lat: %1$.6f  \u0020\u0020\u0020   Lng: %2$.6f</string>
 
-    <string name="number_of_places">Places: %1$d\u0020</string>
 
-    <string name="show_all">Show all</string>
-    <string name="show_less">Show_less</string>
+    <string name="show_all">Show All</string>
+    <string name="show_less">Show Less</string>
     <string name="place_name">Place Name</string>
     <string name="country_name">Country Name</string>
     <string name="city_name">City Name</string>
@@ -20,7 +19,5 @@
     <string name="show_todos">Show ToDos</string>
     <string name="hide_toDos">Hide ToDos</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
