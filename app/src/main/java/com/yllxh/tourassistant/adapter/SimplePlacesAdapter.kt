@@ -1,5 +1,6 @@
 package com.yllxh.tourassistant.adapter
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,15 +72,20 @@ class SimplePlacesAdapter(
         val binding = ItemSimplePlaceListBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
-    inner class ViewHolder (private val binding: ItemSimplePlaceListBinding) :
+
+    inner class ViewHolder(private val binding: ItemSimplePlaceListBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val defaultColor = (binding.root.background as ColorDrawable?)?.color ?: ColorDrawable().color
         fun bind(
             place: Place,
             onItemClickListener: (Place) -> Unit
         ) {
             binding.place = place
-            binding.placeName.colorView(selectedPlaces.contains(place))
-            binding.root.colorView(selectedPlaces.contains(place))
+            if (usesItemSelection) {
+                binding.placeName.colorView(selectedPlaces.contains(place))
+                binding.root.colorView(selectedPlaces.contains(place))
+            }
             binding.placeName.setOnClickListener {
                 onItemClickListener(place)
                 if (!usesItemSelection)
@@ -104,7 +110,7 @@ class SimplePlacesAdapter(
             val color = if (selected) {
                 R.color.colorSelectedItem
             } else {
-                R.color.colorNonSelectedItem
+                defaultColor
             }
             setBackGroundColorTo(color)
         }
