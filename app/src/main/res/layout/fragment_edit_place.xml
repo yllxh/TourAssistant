@@ -12,17 +12,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E0F7FA">
+        android:background="@color/colorBackground">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/country_name"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextDark"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/country_edit_text"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/place_name_edit_text" />
 
@@ -32,9 +35,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/city_name"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextDark"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/city_edit_text"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/country_edit_text" />
 
@@ -48,7 +53,7 @@
             android:hint="@string/place_name"
             android:text="@{place.name}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textColor="@color/colorEditText"
+            android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +69,7 @@
             android:hint="@string/country_name"
             android:text="@{place.location.country}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textColor="@color/colorEditText"
+            android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="@+id/place_name_edit_text"
@@ -80,7 +85,7 @@
             android:hint="@string/city_name"
             android:text="@{place.location.city}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textColor="@color/colorEditText"
+            android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="@+id/country_edit_text"
@@ -96,9 +101,11 @@
             android:fontFamily="sans-serif"
             android:text="@string/importance"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextDark"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/city_edit_text"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/city_edit_text" />
 
@@ -106,15 +113,29 @@
             android:id="@+id/importance_seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
             android:max="10"
             android:progress="@{place.importance}"
+            android:progressTint="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="@+id/importance_label_text_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/importance_label_text_view"
+            app:layout_constraintEnd_toStartOf="@+id/importance_textView"
+            app:layout_constraintStart_toStartOf="@+id/city_edit_text"
             app:layout_constraintTop_toTopOf="@+id/importance_label_text_view"
             tools:progress="10" />
+
+        <TextView
+            android:id="@+id/importance_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_bookmark_48"
+            android:gravity="center"
+            android:text="@{String.valueOf(place.importance)}"
+            android:textColor="@color/colorTextLight"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/importance_seekBar"
+            app:layout_constraintEnd_toEndOf="@+id/city_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/importance_seekBar"
+            tools:text="10" />
 
         <TextView
             android:id="@+id/lat_lng_text_view"
@@ -124,7 +145,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextDark"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/editLatLng"
             app:layout_constraintStart_toStartOf="@+id/editLatLng"
@@ -162,8 +183,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
-            android:backgroundTint="#B5E1DD"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/add_todo"
+            android:textColor="@color/colorTextLight"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -176,7 +198,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:text="@string/place_name"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextDark"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
