@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".screens.editpatth.SelectPlacesDialog"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".screens.editpatth.SelectPlacesDialog">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -23,6 +23,8 @@
             android:id="@+id/add_selected_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_selected" />
+            android:backgroundTint="@color/colorButton"
+            android:text="@string/add_selected"
+            android:textColor="@color/colorTextLight" />
     </LinearLayout>
 </layout>
