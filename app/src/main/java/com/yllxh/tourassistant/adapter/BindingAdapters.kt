@@ -2,6 +2,7 @@ package com.yllxh.tourassistant.adapter
 
 import android.view.View
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
@@ -24,4 +25,9 @@ fun View.setViewVisibility(isVisible: Boolean?) {
     else
         View.GONE
 
+}
+@BindingAdapter("cardElevationInDP")
+fun CardView.setCardElevationInDP(elevation: Int) {
+    fun Int.toPx(): Float = this * context.resources.displayMetrics.density
+    cardElevation = elevation.toPx()
 }
