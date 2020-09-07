@@ -8,6 +8,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.crossreference.
 
 @Dao
 interface CrossReferenceDao {
+
     @Delete
     fun removeCrossRefs(crossRef: List<PathPlaceCrossRef>)
 

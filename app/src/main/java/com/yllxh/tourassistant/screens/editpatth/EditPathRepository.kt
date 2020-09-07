@@ -43,28 +43,29 @@ class EditPathRepository(
         insertCrossRef(savedPath)
     }
 
-    private fun insertCrossRef(editedPath: Path) = with(mutableListOf<PathPlaceCrossRef>()) {
+    private fun insertCrossRef(editedPath: Path) {
+        val crossRefs = mutableListOf<PathPlaceCrossRef>()
 
         editedPath.places.forEach { place ->
-            add(PathPlaceCrossRef(editedPath.pathId, place.placeId))
+            crossRefs.add(PathPlaceCrossRef(editedPath.pathId, place.placeId))
         }
-        crossRefDao.insertCrossRefs(this)
+        crossRefDao.insertCrossRefs(crossRefs)
     }
 
     private fun removeUnselectedPathPlacesCrossRef(path: Path) {
         val currentlySelected = path.places
-        val unselectedPlaces = pathDao.getRawPath(path.pathId).path.places.filter {
-            !currentlySelected.contains(it)
+        val unselectedPlaces =pathDao.getRawPath(path.pathId)
+                                                .path
+                                                .places
+                                                .filter { !currentlySelected.contains(it) }
+
+        val crossRefs = mutableListOf<PathPlaceCrossRef>()
+
+        unselectedPlaces.forEach {
+            crossRefs.add(PathPlaceCrossRef(path.pathId, it.placeId))
         }
 
-        with(mutableListOf<PathPlaceCrossRef>()) { // cross reference to be be removed
-
-            unselectedPlaces.forEach {
-                add(PathPlaceCrossRef(path.pathId, it.placeId))
-            }
-
-            crossRefDao.removeCrossRefs(this)
-        }
+        crossRefDao.removeCrossRefs(crossRefs)
     }
 
 }
