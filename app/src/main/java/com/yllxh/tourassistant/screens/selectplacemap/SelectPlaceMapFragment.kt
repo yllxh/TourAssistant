@@ -144,7 +144,7 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         locationRetriever = LocationRetriever(
             this,
             onLocationReceived = viewModel::updateUserLocation,
-            onMissingPermission = { onMissingLocationPermission() }
+            onMissingPermission = ::onMissingLocationPermission
         )
 
         locationRetriever.requestDeviceLocation()
