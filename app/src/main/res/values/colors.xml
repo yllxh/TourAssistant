@@ -9,7 +9,7 @@
     <color name="colorSelectedItem">@color/colorPrimary</color>
 
     <color name="colorTrackingUser">@color/colorAccent</color>
-    <color name="colorStoppedTrackingUser">@color/colorPrimaryDark</color>
+    <color name="colorStoppedTrackingUser">#88638573</color>
 
     <color name="colorDivider">#BDBDBD</color>
 
