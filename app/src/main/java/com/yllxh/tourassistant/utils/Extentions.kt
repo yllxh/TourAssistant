@@ -17,6 +17,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.tabs.TabLayout
 import com.yllxh.tourassistant.data.model.Address
 import com.yllxh.tourassistant.data.model.Location
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
@@ -144,4 +145,21 @@ fun com.google.maps.model.LatLng.isEqualTo(other: com.google.maps.model.LatLng, 
 
 fun com.google.maps.model.LatLng.toLatLng(): LatLng {
     return LatLng(lat, lng)
+}
+
+fun TabLayout.onTabSelected(block: (Int) -> Unit) {
+    addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            block(tab?.position ?: return)
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+        }
+    })
+}
+fun TabLayout.selectTabAt(position: Int) {
+    getTabAt(position)?.select()
 }

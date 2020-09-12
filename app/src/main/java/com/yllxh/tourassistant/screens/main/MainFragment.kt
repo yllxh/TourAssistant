@@ -9,6 +9,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.yllxh.tourassistant.adapter.MainFragmentTabAdapter
 
 import com.yllxh.tourassistant.databinding.FragmentMainBinding
+import com.yllxh.tourassistant.utils.AppPreferences.Companion.getLastSelectedTab
+import com.yllxh.tourassistant.utils.AppPreferences.Companion.setLastSelectedTab
+import com.yllxh.tourassistant.utils.onTabSelected
+import com.yllxh.tourassistant.utils.selectTabAt
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
@@ -24,6 +28,8 @@ class MainFragment : Fragment() {
             TabLayoutMediator(tabLayout, pager) { tab, position ->
                 tab.text = MainFragmentTabAdapter.getTabName(position)
             }.attach()
+            tabLayout.selectTabAt(requireContext().getLastSelectedTab())
+            tabLayout.onTabSelected { requireContext().setLastSelectedTab(it) }
         }
 
         return binding.root
