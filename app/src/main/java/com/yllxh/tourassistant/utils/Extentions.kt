@@ -7,6 +7,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -162,4 +163,17 @@ fun TabLayout.onTabSelected(block: (Int) -> Unit) {
 }
 fun TabLayout.selectTabAt(position: Int) {
     getTabAt(position)?.select()
+}
+
+fun SeekBar.onProgressChangedListener(block:(Int) -> Unit) {
+    setOnSeekBarChangeListener(object :
+        SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            block(progress)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    })
+
 }
