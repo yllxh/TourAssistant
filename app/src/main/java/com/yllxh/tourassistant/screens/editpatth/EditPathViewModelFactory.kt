@@ -15,5 +15,4 @@ class EditPathViewModelFactory(private val path: Path, private val app: Applicat
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-
 }

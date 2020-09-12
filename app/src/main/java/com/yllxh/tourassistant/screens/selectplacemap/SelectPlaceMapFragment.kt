@@ -156,6 +156,7 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
 
         if (locationRetriever.isTrackingUser) {
             map.animateCameraAt(userLocation)
+            viewModel.setTrackUserLocation(false)
         }
     }
 
