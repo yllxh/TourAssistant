@@ -16,4 +16,8 @@ class EditPlaceViewModel(place: Place, app: Application) : AndroidViewModel(app)
         repository.saveChangesToPlace(place)
     }
 
+    fun delete() = viewModelScope.launch {
+        repository.delete()
+    }
+
 }

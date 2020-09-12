@@ -3,7 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/save_place_menu_item"
+        android:id="@+id/delete"
+        android:enabled="true"
+        android:title="Delete"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/save"
         android:title="Save"
         app:showAsAction="always" />
 </menu>

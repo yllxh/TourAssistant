@@ -9,7 +9,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PlaceRepository(place: Place, context: Context) {
+class PlaceRepository(private val place: Place, context: Context) {
     private val placeDao: PlaceDao
     val toDos: LiveData<List<ToDo>>
 
@@ -24,5 +24,10 @@ class PlaceRepository(place: Place, context: Context) {
             placeDao.updatePlace(place)
         else
             placeDao.insertPlace(place)
+    }
+
+    suspend fun delete() = withContext(Dispatchers.IO) {
+        if (place.placeId != 0L)
+            placeDao.delete(place)
     }
 }

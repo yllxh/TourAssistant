@@ -56,8 +56,13 @@ class EditPlaceFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
-            R.id.save_place_menu_item -> {
+            R.id.save -> {
                 viewModel.saveChangesToPlace(extractPlaceInfoFromLayout())
+                findNavController().navigate(toMainFragment())
+                true
+            }
+            R.id.delete -> {
+                viewModel.delete()
                 findNavController().navigate(toMainFragment())
                 true
             }
