@@ -11,7 +11,7 @@ import com.google.android.gms.location.*
 class LocationRetriever(
     private val fragment: Fragment,
     var keepTrackOfUser: Boolean = false,
-    var intervalInMilliseconds: Long = 10000L,
+    private var intervalInMilliseconds: Long = 10000L,
     private val onMissingPermission: () -> Unit,
     private val onLocationReceived: (Location) -> Unit
 ) : LifecycleObserver {

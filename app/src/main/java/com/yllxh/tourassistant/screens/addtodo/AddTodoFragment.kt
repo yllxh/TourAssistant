@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.databinding.FragmentAddTodoBinding
-import kotlinx.android.synthetic.main.fragment_add_todo.*
 
 class AddTodoFragment : Fragment() {
     private lateinit var binding: FragmentAddTodoBinding

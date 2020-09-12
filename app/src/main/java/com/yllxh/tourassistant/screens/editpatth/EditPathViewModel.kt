@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import kotlinx.coroutines.launch
 
 class EditPathViewModel(path: Path, app: Application) : AndroidViewModel(app) {

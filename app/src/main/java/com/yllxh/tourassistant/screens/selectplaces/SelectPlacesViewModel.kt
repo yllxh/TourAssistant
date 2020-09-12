@@ -3,7 +3,6 @@ package com.yllxh.tourassistant.screens.selectplaces
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.yllxh.tourassistant.data.source.local.database.AppDatabase
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 

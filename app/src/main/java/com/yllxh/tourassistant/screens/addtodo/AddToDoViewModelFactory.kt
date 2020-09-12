@@ -3,9 +3,7 @@ package com.yllxh.tourassistant.screens.addtodo
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
-import com.yllxh.tourassistant.screens.editplace.EditPlaceViewModel
 import java.lang.IllegalArgumentException
 
 class AddToDoViewModelFactory (

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.yllxh.tourassistant.data.source.local.database.AppDatabase
 import com.yllxh.tourassistant.data.source.local.database.dao.PlaceDao
-import com.yllxh.tourassistant.data.source.local.database.dao.ToDoDao
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.data.source.local.database.entity.ToDo
 import kotlinx.coroutines.Dispatchers

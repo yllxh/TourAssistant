@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
-import com.yllxh.tourassistant.screens.editpatth.EditPathViewModel
 
 class ViewPathViewModelFactory (private val path: Path, private val app: Application) :
     ViewModelProvider.Factory {
