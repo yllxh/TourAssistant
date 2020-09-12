@@ -31,7 +31,18 @@ private val placeFields = listOf(
     GoogleApi_Place.Field.ADDRESS,
     GoogleApi_Place.Field.ID,
     GoogleApi_Place.Field.NAME,
-    GoogleApi_Place.Field.LAT_LNG
+    GoogleApi_Place.Field.LAT_LNG,
+    GoogleApi_Place.Field.BUSINESS_STATUS,
+    GoogleApi_Place.Field.PLUS_CODE,
+    GoogleApi_Place.Field.UTC_OFFSET,
+    GoogleApi_Place.Field.VIEWPORT,
+    GoogleApi_Place.Field.TYPES,
+//    GoogleApi_Place.Field.WEBSITE_URI,
+//    GoogleApi_Place.Field.RATING,
+//    GoogleApi_Place.Field.USER_RATINGS_TOTAL,
+//    GoogleApi_Place.Field.PHONE_NUMBER,
+//    GoogleApi_Place.Field.OPENING_HOURS,
+    GoogleApi_Place.Field.PHOTO_METADATAS
 )
 
 class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
@@ -43,11 +54,22 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationRetriever: LocationRetriever
 
     private lateinit var binding: FragmentSelectPlaceBinding
-    private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
     private val viewModel by lazy {
         val place = SelectPlaceMapFragmentArgs.fromBundle(requireArguments()).selectedPlace
         val factory = SelectPlaceMapViewModelFactory(place, requireActivity().application)
         ViewModelProvider(this, factory).get(SelectPlaceMapViewModel::class.java)
+    }
+
+    private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
+
+    private val onPlaceSelectedListener = object : PlaceSelectionListener {
+        override fun onPlaceSelected(apiPlace: GoogleApi_Place) {
+            viewModel.setSelectedPlace(apiPlace.toPlace())
+        }
+
+        override fun onError(status: Status) {
+            toast("Place could not be retrieved")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,24 +93,20 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
             .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment)
             .apply { setPlaceFields(placeFields) }
 
-        autoComplete.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(apiPlace: GoogleApi_Place) {
-                viewModel.setSelectedPlace(apiPlace.toPlace())
-            }
 
-            override fun onError(status: Status) {
-                toast("Place could not be retrieved")
-            }
-        })
+        autoComplete.setOnPlaceSelectedListener(onPlaceSelectedListener)
+
         binding.trackUserLocationButton.setOnClickListener {
-            if (locationRetriever.keepTrackOfUser) {
-                locationRetriever.keepTrackOfUser = false
-                binding.trackUserLocationButton.setColor(R.color.colorStoppedTrackingUser)
-            } else {
-                locationRetriever.keepTrackOfUser = true
-                locationRetriever.requestDeviceLocation()
-                binding.trackUserLocationButton.setColor(R.color.colorTrackingUser)
-            }
+            binding.trackUserLocationButton.setColor(
+                if (locationRetriever.keepTrackOfUser) {
+                    locationRetriever.keepTrackOfUser = false
+                    R.color.colorStoppedTrackingUser
+                } else {
+                    locationRetriever.keepTrackOfUser = true
+                    locationRetriever.requestDeviceLocation()
+                    R.color.colorTrackingUser
+                }
+            )
         }
         observe(viewModel.selectedPlace) {
             if (!::map.isInitialized || it.location.isNotValid())
@@ -112,8 +130,7 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
                 REQUEST.STARTED -> toast("Fetching info...")
                 REQUEST.FINISHED -> toast("Done.")
                 REQUEST.FAILED -> toast("Info not found.")
-                REQUEST.UNKNOWN -> {
-                }
+                REQUEST.UNKNOWN -> {}
             }
         }
 
