@@ -31,8 +31,10 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
 
     private lateinit var locationRetriever: LocationRetriever
-    private lateinit var binding: FragmentFollowPathBinding
+
     private val path by lazy { FollowPathFragmentArgs.fromBundle(requireArguments()).path }
+
+    private lateinit var binding: FragmentFollowPathBinding
     private val viewModel by lazy {
         val factory = FollowPathViewModelFactory(path, requireActivity().application)
         ViewModelProvider(this, factory).get(FollowPathViewModel::class.java)
@@ -55,13 +57,14 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.trackUserLocationButton.setOnClickListener {
-            if (viewModel.trackUser) {
-                viewModel.trackUser = false
-                binding.trackUserLocationButton.setColor(R.color.colorStoppedTrackingUser)
+            val color = if (viewModel.trackUser) {
+                R.color.colorStoppedTrackingUser
             } else {
-                viewModel.trackUser = true
-                binding.trackUserLocationButton.setColor(R.color.colorTrackingUser)
+                R.color.colorTrackingUser
             }
+            binding.trackUserLocationButton.setColor(color)
+
+            viewModel.trackUser = !viewModel.trackUser
         }
 
         observe(viewModel.userLocation) {
@@ -74,49 +77,58 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun calculatePath() {
-        val locations = mutableListOf<LatLng>().apply {
-            path.places.forEach {
-                add(it.location.toMapsModelLatLng())
-            }
+        val locations = mutableListOf<LatLng>()
+        path.places.forEach {
+            locations.add(it.location.toMapsModelLatLng())
         }
+
+        val first = locations.first()
         DirectionsApiRequest(geoApiContext).apply {
-            val first = locations.first()
             origin(first)
             destination(locations.last())
             map.animateCameraAt(com.google.android.gms.maps.model.LatLng(first.lat, first.lng))
 
-            waypoints(*(locations.apply {
-                removeAt(0)
+
+            val waypoints = locations.apply {
+                // Remove the origin and the destination from the waypoints
                 removeAt(size - 1)
-            }.toTypedArray()))
+                removeAt(0)
+            }.toTypedArray()
 
+            waypoints(*waypoints)
             mode(TravelMode.WALKING)
-            setCallback(object : PendingResult.Callback<DirectionsResult?> {
-                override fun onFailure(e: Throwable?) {
-                    Log.d("FollowPathFragment", "onResult: ${e?.printStackTrace()}")
-                }
+            setCallback(directionRequestResponse)
+        }
+    }
 
-                override fun onResult(result: DirectionsResult?) = onMainThread {
-                    val routes = result?.routes
-                        ?: return@onMainThread
-                    for (route in routes) {
-                        viewModel.onDirectionRouteRetrieved(route)
-                        val decodedPath: MutableList<LatLng> =
-                            PolylineEncoding.decode(route.overviewPolyline.encodedPath)
-
-                        val polyline = PolylineOptions().apply {
-                            addAll(decodedPath.map { com.google.android.gms.maps.model.LatLng(it.lat, it.lng) })
-                        }
-                        val addPolyline = map.addPolyline(polyline)
-                        addPolyline.color =
-                            ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark)
-                        addPolyline.width = 10f
-
-                    }
-                }
-            })
+    private val directionRequestResponse = object : PendingResult.Callback<DirectionsResult?> {
+        override fun onFailure(e: Throwable?) {
+            Log.d("FollowPathFragment", "onResult: ${e?.printStackTrace()}")
         }
 
+        override fun onResult(result: DirectionsResult?) = onMainThread {
+            val routes = result?.routes
+                ?: return@onMainThread
+            for (route in routes) {
+                viewModel.onDirectionRouteRetrieved(route)
+                val decodedPath: MutableList<LatLng> =
+                    PolylineEncoding.decode(route.overviewPolyline.encodedPath)
+
+                val polyline = PolylineOptions().apply {
+                    addAll(decodedPath.map {
+                        com.google.android.gms.maps.model.LatLng(
+                            it.lat,
+                            it.lng
+                        )
+                    })
+                }
+                val addPolyline = map.addPolyline(polyline)
+                addPolyline.color =
+                    ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark)
+                addPolyline.width = 10f
+
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
