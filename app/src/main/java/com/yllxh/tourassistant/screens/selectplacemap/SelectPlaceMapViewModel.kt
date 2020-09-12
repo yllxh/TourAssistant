@@ -31,6 +31,9 @@ class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidV
     private val _userLocation = MutableLiveData<LatLng>()
     val userLocation: LiveData<LatLng> get() = _userLocation
 
+    private var _isTrackingUser = MutableLiveData(false)
+    val isTrackingUser: LiveData<Boolean> get() = _isTrackingUser
+
     private fun searchAddressAt(latLng: LatLng, isUserLocation: Boolean = false) =
         viewModelScope.launch {
             _fetchingInfo.value = REQUEST.STARTED
@@ -75,10 +78,14 @@ class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidV
 
     fun updateUserLocation(newLocation: Location) {
         _userLocation.value = newLocation.toLatLng()
-        searchAddressAt(newLocation.toLatLng(), isUserLocation = true)
+//        searchAddressAt(newLocation.toLatLng(), isUserLocation = true)
     }
 
     private fun Location.toLatLng(): LatLng {
         return LatLng(latitude, longitude)
+    }
+
+    fun setTrackUserLocation(trackUser: Boolean) {
+        _isTrackingUser.value = trackUser
     }
 }

@@ -29,20 +29,20 @@ import com.yllxh.tourassistant.screens.selectplacemap.SelectPlaceMapFragmentDire
 
 private val placeFields = listOf(
     GoogleApi_Place.Field.ADDRESS,
-    GoogleApi_Place.Field.ID,
-    GoogleApi_Place.Field.NAME,
-    GoogleApi_Place.Field.LAT_LNG,
     GoogleApi_Place.Field.BUSINESS_STATUS,
+    GoogleApi_Place.Field.ID,
+    GoogleApi_Place.Field.LAT_LNG,
+    GoogleApi_Place.Field.NAME,
+    GoogleApi_Place.Field.PHOTO_METADATAS,
     GoogleApi_Place.Field.PLUS_CODE,
-    GoogleApi_Place.Field.UTC_OFFSET,
-    GoogleApi_Place.Field.VIEWPORT,
     GoogleApi_Place.Field.TYPES,
+    GoogleApi_Place.Field.UTC_OFFSET,
+    GoogleApi_Place.Field.VIEWPORT
 //    GoogleApi_Place.Field.WEBSITE_URI,
 //    GoogleApi_Place.Field.RATING,
 //    GoogleApi_Place.Field.USER_RATINGS_TOTAL,
 //    GoogleApi_Place.Field.PHONE_NUMBER,
 //    GoogleApi_Place.Field.OPENING_HOURS,
-    GoogleApi_Place.Field.PHOTO_METADATAS
 )
 
 class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
@@ -59,10 +59,9 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         val factory = SelectPlaceMapViewModelFactory(place, requireActivity().application)
         ViewModelProvider(this, factory).get(SelectPlaceMapViewModel::class.java)
     }
-
     private val selectedPlace: Place get() = viewModel.selectedPlace.value!!
 
-    private val onPlaceSelectedListener = object : PlaceSelectionListener {
+    private val onAutoCompletePlaceSelected = object : PlaceSelectionListener {
         override fun onPlaceSelected(apiPlace: GoogleApi_Place) {
             viewModel.setSelectedPlace(apiPlace.toPlace())
         }
@@ -84,6 +83,8 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSelectPlaceBinding.inflate(inflater)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         (childFragmentManager
             .findFragmentById(R.id.mapFragment) as SupportMapFragment)
@@ -93,34 +94,14 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
             .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment)
             .apply { setPlaceFields(placeFields) }
 
-
-        autoComplete.setOnPlaceSelectedListener(onPlaceSelectedListener)
-
-        binding.trackUserLocationButton.setOnClickListener {
-            binding.trackUserLocationButton.setColor(
-                if (locationRetriever.keepTrackOfUser) {
-                    locationRetriever.keepTrackOfUser = false
-                    R.color.colorStoppedTrackingUser
-                } else {
-                    locationRetriever.keepTrackOfUser = true
-                    locationRetriever.requestDeviceLocation()
-                    R.color.colorTrackingUser
-                }
-            )
-        }
-        observe(viewModel.selectedPlace) {
-            if (!::map.isInitialized || it.location.isNotValid())
-                return@observe
-
-            marker?.remove()
-            marker = map.addSimpleMarker(it)
-            map.animateCameraAt(it)
+        autoComplete.setOnPlaceSelectedListener(onAutoCompletePlaceSelected)
 
 
-            if (!it.location.addressAsString.isBlank()) {
-                marker!!.title = it.location.addressAsString
-            }
-        }
+        binding.trackUserLocationButton.setOnClickListener(this::onToggleTrackUserLocation)
+
+        observe(viewModel.userLocation, this::onUserLocationUpdated)
+        observe(viewModel.selectedPlace, this::onSelectedPlaceUpdated)
+        observe(viewModel.isTrackingUser, this::onIsTrackingUserUpdated)
 
         observe(viewModel.fetchingInfo) {
             if (selectedPlace.placeId == 0L)
@@ -130,45 +111,86 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
                 REQUEST.STARTED -> toast("Fetching info...")
                 REQUEST.FINISHED -> toast("Done.")
                 REQUEST.FAILED -> toast("Info not found.")
-                REQUEST.UNKNOWN -> {}
+                REQUEST.UNKNOWN -> {
+                }
             }
         }
 
         return binding.root
     }
 
+    private fun onSelectedPlaceUpdated(place: Place) {
+        if (!::map.isInitialized || place.location.isNotValid())
+            return
+
+        viewModel.setTrackUserLocation(false)
+
+        marker?.remove()
+        marker = map.addSimpleMarker(place)
+        map.animateCameraAt(place)
+
+
+        if (!place.location.addressAsString.isBlank()) {
+            marker!!.title = place.location.addressAsString
+        }
+    }
+
+    private fun onToggleTrackUserLocation(v: View) {
+        viewModel.setTrackUserLocation(!locationRetriever.isTrackingUser)
+    }
+
+    private fun onIsTrackingUserUpdated(isTracking: Boolean) {
+        if (::locationRetriever.isInitialized)
+            locationRetriever.setTrackUserLocation(isTracking)
+
+        binding.trackUserLocationButton.setColor(
+            if (isTracking)
+                R.color.colorTrackingUser
+            else
+                R.color.colorStoppedTrackingUser
+        )
+    }
+
+    private fun onUserLocationUpdated(userLocation: LatLng?) {
+        userLocation ?: return
+
+        if (locationRetriever.isTrackingUser) {
+            map.animateCameraAt(userLocation)
+        }
+    }
+
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap.apply {
-            uiSettings.isMyLocationButtonEnabled = false
-            if (hasLocationPermission()) {
-                isMyLocationEnabled = true
-                binding.trackUserLocationButton.isEnabled = true
-            } else {
-                isMyLocationEnabled = false
-                binding.trackUserLocationButton.isEnabled = false
-                onMissingLocationPermission()
-            }
-            if (selectedPlace.location.isValid()) {
-                marker = addSimpleMarker(selectedPlace)
-                animateCameraAt(selectedPlace)
-            }
-
-            setOnMapLongClickListener(this@SelectPlaceMapFragment::onMapLongClickListener)
-            setOnPoiClickListener(this@SelectPlaceMapFragment::onPoiClickListener)
-        }
 
         locationRetriever = LocationRetriever(
             this,
             onLocationReceived = viewModel::updateUserLocation,
             onMissingPermission = ::onMissingLocationPermission
         )
+        viewModel.setTrackUserLocation(locationRetriever.isTrackingUser)
 
-        locationRetriever.requestDeviceLocation()
+        map = googleMap.apply {
+            uiSettings.isMyLocationButtonEnabled = false
+            val hasLocationPermission = hasLocationPermission()
 
-        observe(viewModel.userLocation) {
-            if (locationRetriever.keepTrackOfUser)
-                map.animateCameraAt(it)
+            isMyLocationEnabled = hasLocationPermission
+            binding.trackUserLocationButton.isEnabled = hasLocationPermission
+
+            if (!hasLocationPermission) {
+                onMissingLocationPermission()
+            }
+
+            if (selectedPlace.placeId != 0L
+                && selectedPlace.location.isValid()) {
+
+                marker = addSimpleMarker(selectedPlace)
+                animateCameraAt(selectedPlace)
+            } else {
+                viewModel.setTrackUserLocation(true)
+            }
+
+            setOnMapLongClickListener(this@SelectPlaceMapFragment::onMapLongClickListener)
+            setOnPoiClickListener(this@SelectPlaceMapFragment::onPoiClickListener)
         }
     }
 
@@ -189,7 +211,6 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
     private fun onMapLongClickListener(latLng: LatLng) {
         val newPlace = selectedPlace.copy(
             location = Location(latLng.latitude, latLng.longitude),
-            _importance = selectedPlace.importance
         )
         viewModel.setSelectedPlace(newPlace)
     }

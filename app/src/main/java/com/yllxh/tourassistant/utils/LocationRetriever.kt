@@ -10,8 +10,8 @@ import com.google.android.gms.location.*
 
 class LocationRetriever(
     private val fragment: Fragment,
-    var keepTrackOfUser: Boolean = false,
-    private var intervalInMilliseconds: Long = 10000L,
+    private var keepTrackOfUser: Boolean = false,
+    private var intervalInMilliseconds: Long = 2000L,
     private val onMissingPermission: () -> Unit,
     private val onLocationReceived: (Location) -> Unit
 ) : LifecycleObserver {
@@ -21,12 +21,17 @@ class LocationRetriever(
 
     private var locationPermissionGranted: Boolean = false
 
+    val isTrackingUser get() = keepTrackOfUser
+
     init {
         fragment.lifecycle.addObserver(this)
     }
 
     @SuppressLint("MissingPermission")
     fun requestDeviceLocation() {
+        if (isWorking)
+            return
+
         if (!fragment.hasLocationPermission()) {
             locationPermissionGranted = false
             isWorking = false
@@ -68,10 +73,6 @@ class LocationRetriever(
                     if (it == null) return@let
 
                     onLocationReceived(it)
-                    if (!keepTrackOfUser) {
-                        fusedLocationProvider?.removeLocationUpdates(locationReceivedCallBack)
-                        isWorking = false
-                    }
                 }
             }
         }
@@ -89,5 +90,19 @@ class LocationRetriever(
         if (isWorking) {
             fusedLocationProvider?.removeLocationUpdates(locationReceivedCallBack)
         }
+    }
+
+    fun setTrackUserLocation(trackUser: Boolean) {
+        keepTrackOfUser = trackUser
+        if (keepTrackOfUser) {
+            requestDeviceLocation()
+        } else {
+            fusedLocationProvider?.removeLocationUpdates(locationReceivedCallBack)
+            isWorking = false
+        }
+    }
+
+    fun toggleTrackUser() {
+        setTrackUserLocation(!keepTrackOfUser)
     }
 }
