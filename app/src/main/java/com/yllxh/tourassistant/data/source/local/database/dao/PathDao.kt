@@ -34,4 +34,7 @@ interface PathDao {
 
 //    @Transaction
 //    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
+
+    @Delete
+    fun deletePath(path: Path)
 }

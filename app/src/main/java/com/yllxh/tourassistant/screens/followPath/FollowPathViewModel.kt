@@ -35,12 +35,12 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
     }
 
     fun onDirectionRouteRetrieved(route: DirectionsRoute) {
-        val mutableListOf = mutableListOf<Pair<Place, Long>>()
 
         val latitude = userLocation.value?.latitude ?: return
         val longitude = userLocation.value?.longitude ?: return
         val userLatLng = LatLng(latitude, longitude)
 
+        val mutableListOf = mutableListOf<Pair<Place, Long>>()
         for ((i, place) in path.places.withIndex()) {
             if (i == 0) {
                 mutableListOf.add(

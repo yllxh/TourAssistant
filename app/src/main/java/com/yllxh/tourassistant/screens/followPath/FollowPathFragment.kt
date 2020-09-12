@@ -103,14 +103,15 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
 
     private val directionRequestResponse = object : PendingResult.Callback<DirectionsResult?> {
         override fun onFailure(e: Throwable?) {
-            Log.d("FollowPathFragment", "onResult: ${e?.printStackTrace()}")
+            Log.d("FollowPathFragment", "onResult: $e")
         }
 
         override fun onResult(result: DirectionsResult?) = onMainThread {
-            val routes = result?.routes
-                ?: return@onMainThread
+            val routes = result?.routes ?: return@onMainThread
+
             for (route in routes) {
-                viewModel.onDirectionRouteRetrieved(route)
+//                viewModel.onDirectionRouteRetrieved(route)
+
                 val decodedPath: MutableList<LatLng> =
                     PolylineEncoding.decode(route.overviewPolyline.encodedPath)
 

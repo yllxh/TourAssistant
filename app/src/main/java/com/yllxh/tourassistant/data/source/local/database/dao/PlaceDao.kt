@@ -44,9 +44,9 @@ interface PlaceDao {
 //
 //    @Update
 //    fun updateAllPlaces(places: List<Place>)
-//
-//    @Delete
-//    fun deletePlace(place: Place)
+
+    @Delete
+    fun deletePlace(place: Place)
 //
 //    @Delete
 //    fun deleteAllPlaces(place: List<Place>)
