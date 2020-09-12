@@ -29,4 +29,12 @@ class AddToDoViewModel(private val todo: ToDo, app: Application) : AndroidViewMo
             }
         }
     }
+
+    fun delete() = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            if (todo.todoId != -1L){
+                toDoDao.deleteToDo(todo)
+            }
+        }
+    }
 }

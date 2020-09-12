@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/delete"
+        android:enabled="true"
+        android:title="Delete"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/save"
         android:enabled="true"
         android:title="Save"

@@ -33,7 +33,7 @@ class AddTodoFragment : Fragment() {
         binding.importanceSeekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                viewModel.setImportance(progress)
+                viewModel.setImportance(progress + 1)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -52,6 +52,12 @@ class AddTodoFragment : Fragment() {
         if (item.itemId == R.id.save) {
             viewModel.setNote(binding.todoEditText.text.toString())
             viewModel.save()
+            findNavController().navigateUp()
+            return true
+        }
+
+        if (item.itemId == R.id.delete) {
+            viewModel.delete()
             findNavController().navigateUp()
             return true
         }
