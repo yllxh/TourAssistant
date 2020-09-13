@@ -76,7 +76,6 @@ class SimplePlacesAdapter(
     inner class ViewHolder(private val binding: ItemSimplePlaceListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val defaultColor = (binding.root.background as ColorDrawable?)?.color ?: ColorDrawable().color
         fun bind(
             place: Place,
             onItemClickListener: (Place) -> Unit
@@ -101,7 +100,6 @@ class SimplePlacesAdapter(
                 binding.root.colorView(!isSelected)
                 it.colorView(!isSelected)
             }
-
         }
 
         private fun View.colorView(selected: Boolean?) {
@@ -110,7 +108,7 @@ class SimplePlacesAdapter(
             val color = if (selected) {
                 R.color.colorSelectedItem
             } else {
-                defaultColor
+                R.color.colorBackground
             }
             setBackGroundColorTo(color)
         }
