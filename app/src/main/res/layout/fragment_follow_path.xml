@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <!--        <import type="com.yllxh.tourassistant.R"/>-->
+        <import type="com.yllxh.tourassistant.R"/>
         <variable
             name="viewModel"
             type="com.yllxh.tourassistant.screens.followPath.FollowPathViewModel" />
@@ -155,10 +155,11 @@
             android:layout_marginBottom="32dp"
             android:onClick="@{() -> viewModel.onFabMoreOptionsClicked()}"
             tools:src="@drawable/fab_more_options_vertically_48dp"
+            fabDrawable="@{viewModel.isFabMoreOptionsClicked ? R.drawable.fab_more_options_horzontaly_48dp : R.drawable.fab_more_options_vertically_48dp}"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-        <!--            fabDrawable="@{(viewModel.isFabMoreOptionsClicked == true) ? R.drawable.fab_more_options_horzontaly_48dp : R.drawable.fab_more_options_vertically_48dp}"-->
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fab_more_options_layout"
@@ -180,7 +181,8 @@
                 android:clickable="true"
                 app:layout_constraintBottom_toTopOf="@+id/fab_toggle_notifications"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/fab_my_location_48dp" />
+                app:srcCompat="@drawable/fab_my_location_48dp"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -201,12 +203,11 @@
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:onClick="@{() -> viewModel.onToggleNotifications()}"
+                fabDrawable="@{viewModel.areNotificationsOn ? R.drawable.fab_notifications_on_48dp : R.drawable.fab_notifications_off_48dp}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:src="@drawable/fab_notifications_on_48dp"
-                />
-            <!--                fabDrawable="@{(viewModel.areNotificationsOn == true) ? R.drawable.fab_notifications_on_48dp : R.drawable.fab_notifications_off_48dp}" -->
-
+                android:focusable="true" />
             <TextView
                 android:id="@+id/fab_notifcation_textView"
                 android:layout_width="wrap_content"
@@ -214,12 +215,12 @@
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/round_corners_transparent_gray"
                 android:padding="8dp"
+                android:text="@{ viewModel.areNotificationsOn ? R.string.notifications_on : R.string.notifications_off}"
                 tools:text="@string/notifications_on"
                 app:layout_constraintBottom_toBottomOf="@+id/fab_toggle_notifications"
                 app:layout_constraintEnd_toStartOf="@+id/fab_toggle_notifications"
                 app:layout_constraintTop_toTopOf="@+id/fab_toggle_notifications" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--                android:text="@{(viewModel.areNotificationsOn == true)  ? R.string.notifications_on : R.string.notifications_off}"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
