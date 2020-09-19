@@ -5,11 +5,18 @@ import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.model.DirectionsRoute
 import com.yllxh.tourassistant.data.source.local.database.entity.Path
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
+import com.yllxh.tourassistant.screens.selectplacemap.PROGRESS
+import com.yllxh.tourassistant.utils.getAddress
 import com.yllxh.tourassistant.utils.toLatLng
+import com.yllxh.tourassistant.utils.toPlace
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(app) {
 
@@ -19,17 +26,27 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
     private val _areNotificationsOn = MutableLiveData(true)
     val areNotificationsOn: LiveData<Boolean> get() = _areNotificationsOn
 
+
+    private val _requestedCurrentAddress = MutableLiveData<Place?>(null)
+    val requestedCurrentAddress: LiveData<Place?> get() = _requestedCurrentAddress
+
+    private val _fetchingCurrentAddressProgress = MutableLiveData(PROGRESS.UNKNOWN)
+    val fetchingAddressProgress: LiveData<PROGRESS> get() = _fetchingCurrentAddressProgress
+
+    private var _wasCurrentAddressRequested = MutableLiveData(false)
+    val wasCurrentAddressRequested: LiveData<Boolean> get() = _wasCurrentAddressRequested
+
     private val _accumulatedDistances = MutableLiveData<List<Pair<Place, Long>>>()
     val accumulatedDistances: LiveData<List<Pair<Place, Long>>> get() = _accumulatedDistances
 
     private val _nextDestination  = MutableLiveData<Pair<Place, Long>>()
-    val nextDestination : LiveData<Pair<Place, Long>> get() = _nextDestination
-
     private val _secondNextDestination  = MutableLiveData<Pair<Place, Long>>()
-    val secondNextDestination : LiveData<Pair<Place, Long>> get() = _secondNextDestination
-
     private val _thirdNextDestination  = MutableLiveData<Pair<Place, Long>>()
+
+    val nextDestination : LiveData<Pair<Place, Long>> get() = _nextDestination
+    val secondNextDestination : LiveData<Pair<Place, Long>> get() = _secondNextDestination
     val  thirdNextDestination : LiveData<Pair<Place, Long>> get() =  _thirdNextDestination
+
 
     private var _isTrackingUser = MutableLiveData(false)
     val isTrackingUser: LiveData<Boolean> get() = _isTrackingUser
@@ -39,6 +56,11 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
 
     fun updateUserLocation(userLocation: Location) {
         _userLocation.value = userLocation
+
+        if (wasCurrentAddressRequested.value == true){
+            _wasCurrentAddressRequested.value = false
+            searchAddressAt(LatLng(userLocation.latitude,userLocation.longitude))
+        }
     }
 
     fun setTrackUserLocation(trackUser: Boolean) {
@@ -98,6 +120,32 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
             _areNotificationsOn.value = !it
         }
     }
+
+    fun onCurrentAddressRequested() {
+        _wasCurrentAddressRequested.value = true
+    }
+
+    private fun searchAddressAt(latLng: LatLng) =
+        viewModelScope.launch {
+            _fetchingCurrentAddressProgress.value = PROGRESS.STARTED
+            withContext(Dispatchers.IO) {
+
+                val address = latLng.getAddress(getApplication())
+                if (address.isBlank()) {
+                    _fetchingCurrentAddressProgress.postValue(PROGRESS.FAILED)
+                    return@withContext
+                }
+
+                val locationAsPlace: Place = com.yllxh.tourassistant.data.model.Location(
+                    latLng.latitude,
+                    latLng.longitude,
+                    address
+                ).toPlace()
+
+                _requestedCurrentAddress.postValue(locationAsPlace)
+                _fetchingCurrentAddressProgress.postValue(PROGRESS.FINISHED)
+            }
+        }
 
     private fun getDistanceInMeters(start: LatLng, end: LatLng): Long {
         val results = FloatArray(1)

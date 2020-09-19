@@ -23,7 +23,10 @@ import com.google.maps.model.DirectionsResult
 import com.google.maps.model.LatLng
 import com.google.maps.model.TravelMode
 import com.yllxh.tourassistant.R
+import com.yllxh.tourassistant.data.source.local.database.entity.Place
 import com.yllxh.tourassistant.databinding.FragmentFollowPathBinding
+import com.yllxh.tourassistant.screens.followPath.dialogs.CurrentAddressInformationDialog
+import com.yllxh.tourassistant.screens.selectplacemap.PROGRESS
 import com.yllxh.tourassistant.utils.*
 
 class FollowPathFragment : Fragment(), OnMapReadyCallback {
@@ -44,7 +47,7 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         binding = FragmentFollowPathBinding.inflate(inflater, container, false)
@@ -65,17 +68,43 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
         binding.trackUserLocationButton.setOnClickListener(this::onToggleTrackUserLocation)
 
         observe(viewModel.userLocation) {
-            if (locationRetriever.isTrackingUser){
+            if (locationRetriever.isTrackingUser) {
                 map.animateCameraAt(
                     com.google.android.gms.maps.model.LatLng(it.latitude, it.longitude))
             }
         }
 
+
+        observe(viewModel.fetchingAddressProgress, this::onFetchingAddressProgressChanged)
+
+        observe(viewModel.requestedCurrentAddress, this::onRequestedCurrentAddressChanged)
+
+        observe(viewModel.wasCurrentAddressRequested) {
+            if (!it) return@observe
+
+            viewModel.setTrackUserLocation(true)
+
+        }
         return binding.root
+    }
+
+    private fun onRequestedCurrentAddressChanged(currentPlace: Place?) {
+        currentPlace ?: return
+
+        CurrentAddressInformationDialog.newInstance(currentPlace)
+            .show(parentFragmentManager, CurrentAddressInformationDialog.TAG)
     }
 
     private fun onToggleTrackUserLocation(v: View) {
         viewModel.setTrackUserLocation(!locationRetriever.isTrackingUser)
+    }
+
+    private fun onFetchingAddressProgressChanged(progress: PROGRESS) = when (progress) {
+        PROGRESS.FAILED -> {
+            toast("Failed to retrieve location.")
+        }
+        else -> {
+        }
     }
 
     private fun onIsTrackingUserUpdated(isTracking: Boolean) {
