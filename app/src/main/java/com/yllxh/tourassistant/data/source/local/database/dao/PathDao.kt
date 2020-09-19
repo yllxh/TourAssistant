@@ -18,11 +18,6 @@ interface PathDao {
     @Query("SELECT * FROM path_table ORDER BY pathId DESC")
     fun getAllPathsWithPlaces(): LiveData<List<PathWithPlaces>>
 
-//
-//    @Transaction
-//    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
-//    fun getPath(pathId: Long): LiveData<PathWithPlaces>
-
     @Update
     fun updatePath(path: Path)
 
@@ -33,9 +28,6 @@ interface PathDao {
     @Transaction
     @Query("SELECT * FROM path_table WHERE pathId = :pathId")
     fun getRawPath(pathId: Long): PathWithPlaces
-
-//    @Transaction
-//    @Query("SELECT * FROM path_table WHERE pathId = :pathId")
 
     @Delete
     fun deletePath(path: Path)
