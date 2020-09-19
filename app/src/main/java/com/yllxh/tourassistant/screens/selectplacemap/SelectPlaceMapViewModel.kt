@@ -10,7 +10,7 @@ import com.yllxh.tourassistant.utils.getAddress
 import com.yllxh.tourassistant.utils.toPlace
 import kotlinx.coroutines.*
 
-enum class REQUEST {
+enum class PROGRESS {
     STARTED, FINISHED, FAILED, UNKNOWN
 }
 
@@ -19,8 +19,8 @@ class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidV
     private val _selectedPlace = MutableLiveData(selectedPlace)
     val selectedPlace: LiveData<Place> get() = _selectedPlace
 
-    private val _fetchingInfo = MutableLiveData(REQUEST.UNKNOWN)
-    val fetchingInfo: LiveData<REQUEST> get() = _fetchingInfo
+    private val _fetchingInfo = MutableLiveData(PROGRESS.UNKNOWN)
+    val fetchingInfo: LiveData<PROGRESS> get() = _fetchingInfo
 
     init {
         if (selectedPlace.location.address.isBlank()) {
@@ -36,11 +36,11 @@ class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidV
 
     private fun searchAddressAt(latLng: LatLng, isUserLocation: Boolean = false) =
         viewModelScope.launch {
-            _fetchingInfo.value = REQUEST.STARTED
+            _fetchingInfo.value = PROGRESS.STARTED
             withContext(Dispatchers.IO) {
                 val address = latLng.getAddress(getApplication())
                 if (address.isBlank()) {
-                    _fetchingInfo.postValue(REQUEST.FAILED)
+                    _fetchingInfo.postValue(PROGRESS.FAILED)
                     return@withContext
                 }
 
@@ -58,7 +58,7 @@ class SelectPlaceMapViewModel(selectedPlace: Place, app: Application) : AndroidV
                         _selectedPlace.postValue(placeWithAddress)
                     }
                 }
-                _fetchingInfo.postValue(REQUEST.FINISHED)
+                _fetchingInfo.postValue(PROGRESS.FINISHED)
             }
         }
 
