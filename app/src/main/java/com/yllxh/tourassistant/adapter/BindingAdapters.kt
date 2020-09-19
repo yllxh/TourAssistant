@@ -3,7 +3,9 @@ package com.yllxh.tourassistant.adapter
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yllxh.tourassistant.R
 import com.yllxh.tourassistant.data.source.local.database.entity.Place
 
@@ -30,4 +32,9 @@ fun View.setViewVisibility(isVisible: Boolean?) {
 fun CardView.setCardElevationInDP(elevation: Int) {
     fun Int.toPx(): Float = this * context.resources.displayMetrics.density
     cardElevation = elevation.toPx()
+}
+
+@BindingAdapter("fabDrawable")
+fun FloatingActionButton.setFabDrawable(id: Int) {
+    setImageDrawable(ResourcesCompat.getDrawable(context.resources, id, null))
 }
