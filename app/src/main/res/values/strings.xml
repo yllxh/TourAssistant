@@ -16,10 +16,16 @@
     <string name="lat_lng">%1$.6f</string>
     <string name="edit">Edit</string>
     <string name="add_todo">Add ToDo</string>
+    <string name="notifications_on">Notifications On</string>
+    <string name="notifications_off">Notifications Off</string>
     <string name="show_todos">Show ToDos</string>
     <string name="hide_toDos">Hide ToDos</string>
     <string name="is_primary">Is Primary</string>
     <string name="is_primary_description">Should you receive notification during the trip about this location?</string>
+    <string name="_9_9m">9.9m</string>
+    <string name="current_destination">Current destination</string>
+    <string name="next_destination">Next destination</string>
+    <string name="my_current_address">My Current Address</string>
 
 
 </resources>
