@@ -108,10 +108,10 @@ class SelectPlaceMapFragment : Fragment(), OnMapReadyCallback {
                 return@observe
 
             when (it) {
-                REQUEST.STARTED -> toast("Fetching info...")
-                REQUEST.FINISHED -> toast("Done.")
-                REQUEST.FAILED -> toast("Info not found.")
-                REQUEST.UNKNOWN -> {
+                PROGRESS.STARTED -> toast("Fetching info...")
+                PROGRESS.FINISHED -> toast("Done.")
+                PROGRESS.FAILED -> toast("Info not found.")
+                PROGRESS.UNKNOWN -> {
                 }
             }
         }
