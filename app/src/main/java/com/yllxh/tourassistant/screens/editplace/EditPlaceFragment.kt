@@ -82,7 +82,8 @@ class EditPlaceFragment : Fragment() {
             location = selectedPlace.location.also {
                 it.city = cityEditText.text.toString()
                 it.country = countryEditText.text.toString()
-            })
+            },
+            isPrimary = binding.isPrimarySwitch.isChecked)
     }
 
 }

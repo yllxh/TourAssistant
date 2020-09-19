@@ -18,6 +18,8 @@
     <string name="add_todo">Add ToDo</string>
     <string name="show_todos">Show ToDos</string>
     <string name="hide_toDos">Hide ToDos</string>
+    <string name="is_primary">Is Primary</string>
+    <string name="is_primary_description">Should you receive notification during the trip about this location?</string>
 
 
 </resources>

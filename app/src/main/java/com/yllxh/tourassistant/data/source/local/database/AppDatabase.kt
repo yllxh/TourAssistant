@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.yllxh.tourassistant.data.source.local.database.dao.CrossReferenceDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PathDao
 import com.yllxh.tourassistant.data.source.local.database.dao.PlaceDao
@@ -20,7 +22,7 @@ import com.yllxh.tourassistant.data.source.local.database.entity.crossreference.
         ToDo::class,
         PathPlaceCrossRef::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -44,11 +46,21 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         "DATABASE_NAME"
-                    ).build()
+                    )
+                        .addMigrations(migration_1_2)
+                        .build()
 
                     INSTANCE = instance
                 }
                 return instance
+            }
+        }
+
+        private val migration_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "ALTER TABLE place_table ADD COLUMN isPrimary INTEGER NOT NULL DEFAULT 1"
+                )
             }
         }
     }

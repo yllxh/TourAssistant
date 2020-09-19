@@ -26,10 +26,8 @@
                 android:id="@+id/divider"
                 style="@style/Divider.Horizontal"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/number_of_notes_images_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/country_city_text_view" />
@@ -106,10 +104,10 @@
                 android:id="@+id/number_of_notes_images_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/notes_24"
-                app:layout_constraintBottom_toTopOf="@+id/place_toDo_recycleView"
-                app:layout_constraintStart_toStartOf="@+id/importance_label_text_view" />
+                app:layout_constraintStart_toStartOf="@+id/importance_label_text_view"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             <TextView
                 android:id="@+id/number_of_notes_text_view"
@@ -130,7 +128,19 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_toDos_button" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                view_visibility="@{place.primary}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/importance_label_text_view"
+                app:layout_constraintStart_toStartOf="@+id/importance_label_text_view"
+                app:layout_constraintTop_toBottomOf="@+id/importance_label_text_view"
+                app:srcCompat="@drawable/star_32dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

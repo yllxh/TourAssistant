@@ -18,7 +18,8 @@ data class Place(
     var name: String = "",
     private var _importance: Int = 1,
     @Embedded var location: Location = Location(),
-    @Ignore var toDos: List<ToDo> = listOf()
+    @Ignore var toDos: List<ToDo> = listOf(),
+    var isPrimary: Boolean = _importance > 5
 ) : Parcelable {
 
     var importance: Int
