@@ -27,6 +27,7 @@ import com.yllxh.tourassistant.databinding.FragmentFollowPathBinding
 import com.yllxh.tourassistant.utils.*
 
 class FollowPathFragment : Fragment(), OnMapReadyCallback {
+
     private lateinit var geoApiContext: GeoApiContext
     private lateinit var map: GoogleMap
 
@@ -46,6 +47,7 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFollowPathBinding.inflate(inflater, container, false)
+
         (childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment)
             .getMapAsync(this)
@@ -56,24 +58,32 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
                 .build()
         }
 
-        binding.trackUserLocationButton.setOnClickListener {
-            val color = if (viewModel.trackUser) {
-                R.color.colorStoppedTrackingUser
-            } else {
-                R.color.colorTrackingUser
-            }
-            binding.trackUserLocationButton.setColor(color)
-
-            viewModel.trackUser = !viewModel.trackUser
-        }
+        observe(viewModel.isTrackingUser, this::onIsTrackingUserUpdated)
+        binding.trackUserLocationButton.setOnClickListener(this::onToggleTrackUserLocation)
 
         observe(viewModel.userLocation) {
-            if (viewModel.trackUser){
+            if (locationRetriever.isTrackingUser){
                 map.animateCameraAt(
                     com.google.android.gms.maps.model.LatLng(it.latitude, it.longitude))
             }
         }
         return binding.root
+    }
+
+    private fun onToggleTrackUserLocation(v: View) {
+        viewModel.setTrackUserLocation(!locationRetriever.isTrackingUser)
+    }
+
+    private fun onIsTrackingUserUpdated(isTracking: Boolean) {
+        if (::locationRetriever.isInitialized)
+            locationRetriever.setTrackUserLocation(isTracking)
+
+        binding.trackUserLocationButton.setColor(
+            if (isTracking)
+                R.color.colorTrackingUser
+            else
+                R.color.colorStoppedTrackingUser
+        )
     }
 
     private fun calculatePath() {
@@ -152,19 +162,18 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
             }
         }
         calculatePath()
-        locationRetriever = LocationRetriever(
-            this,
-            keepTrackOfUser = true,
-            onLocationReceived = viewModel::updateUserLocation,
-            onMissingPermission = { onMissingLocationPermission() }
-        )
-        locationRetriever.requestDeviceLocation()
     }
 
     @SuppressLint("MissingPermission")
     private fun GoogleMap.enableUserTracking() {
         isMyLocationEnabled = true
         binding.trackUserLocationButton.isEnabled = true
+        locationRetriever = LocationRetriever(
+            this@FollowPathFragment,
+            keepTrackOfUser = true,
+            onLocationReceived = viewModel::updateUserLocation,
+            onMissingPermission = { onMissingLocationPermission() }
+        )
     }
 }
 

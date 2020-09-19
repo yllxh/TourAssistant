@@ -25,10 +25,11 @@ class LocationRetriever(
 
     init {
         fragment.lifecycle.addObserver(this)
+        setTrackUserLocation(isTrackingUser)
     }
 
     @SuppressLint("MissingPermission")
-    fun requestDeviceLocation() {
+    private fun requestDeviceLocation() {
         if (isWorking)
             return
 
@@ -100,9 +101,5 @@ class LocationRetriever(
             fusedLocationProvider?.removeLocationUpdates(locationReceivedCallBack)
             isWorking = false
         }
-    }
-
-    fun toggleTrackUser() {
-        setTrackUserLocation(!keepTrackOfUser)
     }
 }

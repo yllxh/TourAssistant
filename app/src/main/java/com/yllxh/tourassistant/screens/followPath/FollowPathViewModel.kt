@@ -25,7 +25,8 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
     private val _thirdNextDestination  = MutableLiveData<Pair<Place, Long>>()
     val  thirdNextDestination : LiveData<Pair<Place, Long>> get() =  _thirdNextDestination
 
-    var trackUser: Boolean = true
+    private var _isTrackingUser = MutableLiveData(false)
+    val isTrackingUser: LiveData<Boolean> get() = _isTrackingUser
 
     private val _userLocation = MutableLiveData<Location>()
     val userLocation: LiveData<Location> get() = _userLocation
@@ -33,6 +34,11 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
     fun updateUserLocation(userLocation: Location) {
         _userLocation.value = userLocation
     }
+
+    fun setTrackUserLocation(trackUser: Boolean) {
+        _isTrackingUser.value = trackUser
+    }
+
 
     fun onDirectionRouteRetrieved(route: DirectionsRoute) {
 
