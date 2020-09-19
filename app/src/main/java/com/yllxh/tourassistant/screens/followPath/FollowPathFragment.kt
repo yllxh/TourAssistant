@@ -46,7 +46,10 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentFollowPathBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         (childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment)
@@ -67,6 +70,7 @@ class FollowPathFragment : Fragment(), OnMapReadyCallback {
                     com.google.android.gms.maps.model.LatLng(it.latitude, it.longitude))
             }
         }
+
         return binding.root
     }
 

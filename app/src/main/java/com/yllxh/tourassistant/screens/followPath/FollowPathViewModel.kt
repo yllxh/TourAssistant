@@ -13,6 +13,12 @@ import com.yllxh.tourassistant.utils.toLatLng
 
 class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(app) {
 
+    private val _isFabMoreOptionsClicked = MutableLiveData(false)
+    val isFabMoreOptionsClicked: LiveData<Boolean> get() = _isFabMoreOptionsClicked
+
+    private val _areNotificationsOn = MutableLiveData(true)
+    val areNotificationsOn: LiveData<Boolean> get() = _areNotificationsOn
+
     private val _accumulatedDistances = MutableLiveData<List<Pair<Place, Long>>>()
     val accumulatedDistances: LiveData<List<Pair<Place, Long>>> get() = _accumulatedDistances
 
@@ -80,6 +86,17 @@ class FollowPathViewModel(val path: Path, app: Application) : AndroidViewModel(a
             and update the new first item in the accumulated Distances
          */
 
+    }
+
+    fun onFabMoreOptionsClicked() {
+        _isFabMoreOptionsClicked.value?.let {
+            _isFabMoreOptionsClicked.value = !it
+        }
+    }
+    fun onToggleNotifications() {
+        _areNotificationsOn.value?.let {
+            _areNotificationsOn.value = !it
+        }
     }
 
     private fun getDistanceInMeters(start: LatLng, end: LatLng): Long {
